@@ -31,8 +31,8 @@ nova:email-templates
 nova:i18n-en-us
 
 accounts-password
-# accounts-twitter
-# accounts-facebook
+accounts-twitter
+accounts-facebook
 
 ############ Debug Packages ############
 
@@ -40,4 +40,5 @@ nova:debug
 
 ############ Your Packages ############
 
-# my-custom-package
+my-custom-package
+react-meteor-data
