@@ -42,3 +42,5 @@ nova:debug
 
 my-custom-package
 react-meteor-data
+service-configuration
+static-html

@@ -40,6 +40,8 @@ renderActions() {
     if (post.color) {
       postClass += " post-"+post.color;
     }
+
+    
     // ⭐ custom code ends here ⭐
 
     return (
