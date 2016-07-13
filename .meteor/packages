@@ -16,7 +16,7 @@ nova:categories
 nova:share
 nova:voting
 nova:forms
-nova:embedly
+# nova:embedly
 nova:api
 nova:rss
 nova:kadira
@@ -44,3 +44,6 @@ my-custom-package
 react-meteor-data
 service-configuration
 static-html
+meteortoys:allthings
+http
+harrison:papa-parse

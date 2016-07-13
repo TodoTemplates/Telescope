@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 /**
- * @summary Callback hooks provide an easy way to add extra steps to common operations. 
+ * @summary Callback hooks provide an easy way to add extra steps to common operations.
  * @namespace Telescope.callbacks
  */
 Telescope.callbacks = {};
@@ -94,7 +94,7 @@ Telescope.callbacks.runAsync = function () {
         callback.apply(this, args);
       });
     });
-  
+
   }
 
 };

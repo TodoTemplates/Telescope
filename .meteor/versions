@@ -40,6 +40,7 @@ facebook@1.2.6
 fortawesome:fontawesome@4.5.0
 fourseven:scss@3.4.3
 geojson-utils@1.0.8
+harrison:papa-parse@1.1.1
 hot-code-push@1.0.4
 html-tools@1.0.9
 htmljs@1.0.9
@@ -70,6 +71,21 @@ meteorhacks:meteorx@1.4.1
 meteorhacks:picker@1.0.3
 meteorhacks:subs-manager@1.6.4
 meteorhacks:unblock@1.1.0
+meteortoys:allthings@3.0.0
+meteortoys:authenticate@3.0.0
+meteortoys:autopub@3.0.0
+meteortoys:blueprint@3.0.0
+meteortoys:email@3.0.0
+meteortoys:hotreload@3.0.0
+meteortoys:listen@3.0.0
+meteortoys:method@3.0.4
+meteortoys:pub@3.0.4
+meteortoys:result@3.0.0
+meteortoys:shell@3.0.0
+meteortoys:status@3.0.0
+meteortoys:sub@3.0.0
+meteortoys:throttle@3.0.0
+meteortoys:toykit@3.0.4
 minifier-css@1.1.11
 minifier-js@1.1.11
 minimongo@1.0.16
@@ -78,6 +94,8 @@ modules-runtime@0.6.3
 mongo@1.1.7
 mongo-id@1.0.4
 mongo-livedata@1.0.12
+msavin:jetsetter@2.0.0
+msavin:mongol@2.0.1
 my-custom-package@0.0.0
 nova:api@0.26.3-nova
 nova:base-components@0.26.3-nova
@@ -89,7 +107,6 @@ nova:core@0.26.3-nova
 nova:debug@0.26.3-nova
 nova:email@0.26.3-nova
 nova:email-templates@0.26.3-nova
-nova:embedly@0.26.3-nova
 nova:events@0.26.3-nova
 nova:forms@0.26.3-nova
 nova:getting-started@0.26.3-nova
