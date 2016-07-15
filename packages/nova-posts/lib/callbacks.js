@@ -1,5 +1,6 @@
-import Posts from './config'
+import Posts from './collection.js'
 import marked from 'marked';
+import Users from 'meteor/nova:users';
 
 //////////////////////////////////////////////////////
 // Collection Hooks                                 //
@@ -92,6 +93,10 @@ Posts.before.update(function (userId, doc, fieldNames, modifier) {
 
 - PostsApprovedNotification
 
+### users.remove.async
+
+- UsersRemoveDeletePosts
+
 */
 
 // ------------------------------------- posts.new.method -------------------------------- //
@@ -121,11 +126,11 @@ function PostsNewRateLimit (post, user) {
 
     // check that user waits more than X seconds between posts
     if(timeSinceLastPost < postInterval)
-      throw new Meteor.Error(604, __('please_wait')+(postInterval-timeSinceLastPost)+__('seconds_before_posting_again'));
+      throw new Meteor.Error(604, 'please_wait'+(postInterval-timeSinceLastPost)+'seconds_before_posting_again');
 
     // check that the user doesn't post more than Y posts per day
     if(numberOfPostsInPast24Hours > maxPostsPer24Hours)
-      throw new Meteor.Error(605, __('sorry_you_cannot_submit_more_than')+maxPostsPer24Hours+__('posts_per_day'));
+      throw new Meteor.Error(605, 'sorry_you_cannot_submit_more_than'+maxPostsPer24Hours+'posts_per_day');
 
   }
 
@@ -265,7 +270,7 @@ Telescope.callbacks.add("posts.new.async", PostsNewNotifications);
 function PostsEditUserCheck (modifier, post, user) {
   // check that user can edit document
   if (!user || !Users.can.edit(user, post)) {
-    throw new Meteor.Error(601, __('sorry_you_cannot_edit_this_post'));
+    throw new Meteor.Error(601, 'sorry_you_cannot_edit_this_post');
   }
   return modifier;
 }
@@ -345,3 +350,15 @@ function PostsApprovedNotification (post) {
   }
 }
 Telescope.callbacks.add("posts.approve.async", PostsApprovedNotification);
+
+// ------------------------------------- users.remove.async -------------------------------- //
+
+function UsersRemoveDeletePosts (user, options) {
+  if (options.deletePosts) {
+    var deletedPosts = Posts.remove({userId: userId});
+  } else {
+    // not sure if anything should be done in that scenario yet
+    // Posts.update({userId: userId}, {$set: {author: "\[deleted\]"}}, {multi: true});
+  }
+}
+Telescope.callbacks.add("users.remove.async", UsersRemoveDeletePosts);
