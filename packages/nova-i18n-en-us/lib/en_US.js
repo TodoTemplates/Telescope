@@ -29,6 +29,8 @@ Telescope.strings.en = {
   "posts.enter_thumbnail_url": "Enter URL",
   "posts.created_message": "Post created.",
   "posts.rate_limit_error": "Please wait {details} seconds before posting again.",
+  "posts.postedAt": "Posted at",
+  "posts.dateNotDefined": "Date not defined",
 
   "comments.comments": "Comments",
   "comments.count": "{count, plural, =0 {No comments} one {# comment} other {# comments}}",

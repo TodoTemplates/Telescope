@@ -39,10 +39,12 @@ Posts.config.STATUS_REJECTED = 3;
 Posts.config.STATUS_SPAM = 4;
 Posts.config.STATUS_DELETED = 5;
 
-const adminGroup = {
-  name: "admin",
-  order: 2
-}
+Posts.groups = {
+  admin: {
+    name: "admin",
+    order: 2
+  }
+};
 
 /**
  * @summary Posts schema
@@ -71,11 +73,11 @@ Posts.schemaJSON = {
   postedAt: {
     type: Date,
     optional: true,
-    // insertableIf: Users.is.admin,
-    // editableIf: Users.is.admin,
+    insertableIf: Users.is.admin,
+    editableIf: Users.is.admin,
     publish: true,
     control: "datetime",
-    group: adminGroup
+    group: Posts.groups.admin
   },
   /**
     URL
@@ -190,7 +192,15 @@ Posts.schemaJSON = {
       options: Posts.config.postStatuses,
       group: 'admin'
     },
-    group: adminGroup
+    group: Posts.groups.admin
+  },
+  /**
+    Whether a post is scheduled in the future or not
+  */
+  isFuture: {
+    type: Boolean,
+    optional: true,
+    publish: true
   },
   /**
     Whether the post is sticky (pinned to the top of posts lists)
@@ -203,7 +213,7 @@ Posts.schemaJSON = {
     editableIf: Users.is.admin,
     control: "checkbox",
     publish: true,
-    group: adminGroup
+    group: Posts.groups.admin
   },
   /**
     Whether the post is inactive. Inactive posts see their score recalculated less often
