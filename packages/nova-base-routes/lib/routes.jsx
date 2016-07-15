@@ -6,6 +6,8 @@ import { ReactRouterSSR } from 'meteor/reactrouter:react-router-ssr';
 import { ListContainer, DocumentContainer } from "meteor/utilities:react-list-container";
 // import useNamedRoutes from 'use-named-routes';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
+import Events from "meteor/nova:events";
+import Helmet from 'react-helmet';
 
 // // ------------------------------------- Other -------------------------------- //
 
@@ -47,6 +49,11 @@ Meteor.startup(() => {
 
   clientOptions.props = {onUpdate: () => {Events.analyticsRequest(); Messages.clearSeen();}};
 
+  serverOptions.htmlHook = (html) => {
+    const head = Helmet.rewind();
+    return html.replace('<head>', '<head>'+ head.title + head.meta + head.link);    
+  }
+  
   // ReactRouterSSR.Run(AppRoutes, {historyHook: () => history}, {historyHook: () => history});
   ReactRouterSSR.Run(AppRoutes, clientOptions, serverOptions);
 

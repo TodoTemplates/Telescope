@@ -20,12 +20,16 @@ Package.onUse( function(api) {
   ], ['client', 'server']);
 
   api.addFiles([
-    'lib/stylesheets/_color-definitions.scss',
-    'lib/stylesheets/custom.scss',
-    'lib/stylesheets/_functions.scss',
-    'lib/stylesheets/_list.scss',
-    'lib/stylesheets/_mixins.scss',
-    'lib/stylesheets/_variables.scss'
+    'lib/stylesheets/custom.scss'
   ], ['client']);
+
+  api.addFiles([
+    'lib/server/templates.js'
+  ], ['server']);
+
+  api.addAssets([
+    'lib/server/emails/customNewPost.handlebars',
+    'lib/server/emails/customEmail.handlebars'
+  ], ['server']);
 
 });

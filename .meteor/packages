@@ -16,7 +16,7 @@ nova:categories
 nova:share
 nova:voting
 nova:forms
-# nova:embedly
+nova:embedly
 nova:api
 nova:rss
 nova:kadira
@@ -31,8 +31,8 @@ nova:email-templates
 nova:i18n-en-us
 
 accounts-password
-accounts-twitter
-accounts-facebook
+# accounts-twitter
+# accounts-facebook
 
 ############ Debug Packages ############
 
@@ -40,10 +40,4 @@ nova:debug
 
 ############ Your Packages ############
 
-my-custom-package
-react-meteor-data
-service-configuration
-static-html
-meteortoys:allthings
-http
-harrison:papa-parse
+# my-custom-package

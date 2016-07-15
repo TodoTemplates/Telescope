@@ -1,4 +1,9 @@
 import marked from 'marked';
+import Posts from "meteor/nova:posts";
+import Comments from "meteor/nova:comments";
+import Categories from "meteor/nova:categories";
+import Events from "meteor/nova:events";
+import Users from "meteor/nova:users";
 
 // TODO: switch over to Tom's migration package.
 

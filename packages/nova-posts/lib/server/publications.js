@@ -1,4 +1,6 @@
-import { CursorCounts } from "meteor/utilities:react-list-container";
+import Posts from '../collection.js';
+// import Comments from "meteor/nova:comments";
+import Users from 'meteor/nova:users';
 
 Posts._ensureIndex({"status": 1, "postedAt": 1});
 
@@ -34,13 +36,11 @@ const getSinglePostUsers = post => {
 
   let users = [post.userId]; // publish post author's ID
 
-  if (typeof Comments !== "undefined") {
-    // get IDs from all commenters on the post
-    const comments = Comments.find({postId: post._id}).fetch();
-    if (comments.length) {
-      users = users.concat(_.pluck(comments, "userId"));
-    }
-  }
+  /* 
+  NOTE: to avoid circular dependencies between nova:posts and nova:comments, 
+  use callback hook to get comment authors
+  */
+  users = Telescope.callbacks.run("posts.single.getUsers", users, post);
   
   // add upvoters
   if (post.upvoters && post.upvoters.length) {
