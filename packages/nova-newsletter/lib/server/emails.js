@@ -1,22 +1,19 @@
-import NovaEmail from 'meteor/nova:email';
-import Newsletter from "../namespace.js";
+// Campaign object is only available on server, so define actions on server only
 
-// Extend email objects with server-only properties
+import Campaign from "./campaign.js";
 
-NovaEmail.emails.newsletter = {
+Telescope.email.emails.newsletter = Object.assign(Telescope.email.emails.newsletter, {
 
-  ...NovaEmail.emails.newsletter, 
-
-  getNewsletter() {
-    return Newsletter.build(Newsletter.getPosts(Telescope.settings.get('postsPerNewsletter', 5)));
+  getCampaign() {
+    return Campaign.build(Campaign.getPosts(Telescope.settings.get('postsPerNewsletter', 5)));
   },
 
   subject() {
-    return this.getNewsletter().subject;
+    return this.getCampaign().subject;
   },
 
   getTestHTML() {
-    var campaign = this.getNewsletter();
+    var campaign = this.getCampaign();
     var newsletterEnabled = '<div class="newsletter-enabled"><strong>Newsletter Enabled:</strong> '+Telescope.settings.get('enableNewsletter', true)+'</div>';
     var mailChimpAPIKey = '<div class="mailChimpAPIKey"><strong>mailChimpAPIKey:</strong> '+(typeof Telescope.settings.get('mailChimpAPIKey') !== "undefined")+'</div>';
     var mailChimpListId = '<div class="mailChimpListId"><strong>mailChimpListId:</strong> '+(typeof Telescope.settings.get('mailChimpListId') !== "undefined")+'</div>';
@@ -25,18 +22,16 @@ NovaEmail.emails.newsletter = {
     return newsletterEnabled+mailChimpAPIKey+mailChimpListId+campaignSubject+campaignSchedule+campaign.html;
   }
 
-};
+});
 
-NovaEmail.emails.newsletterConfirmation = {
-
-  ...NovaEmail.emails.newsletterConfirmation, 
+Telescope.email.emails.newsletterConfirmation = Object.assign(Telescope.email.emails.newsletterConfirmation, {
 
   getTestHTML() {
-    return NovaEmail.getTemplate('newsletterConfirmation')({
+    return Telescope.email.getTemplate('newsletterConfirmation')({
       time: 'January 1st, 1901',
       newsletterLink: 'http://example.com',
       subject: 'Lorem ipsum dolor sit amet'
     });
   }
 
-};
+});

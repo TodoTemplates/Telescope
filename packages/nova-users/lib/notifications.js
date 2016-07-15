@@ -1,4 +1,4 @@
-import Users from './collection.js';
+import Users from './namespace.js';
 
 Users.getNotificationProperties = function (user) {
   const properties = {

@@ -1,6 +1,3 @@
-import Posts from "meteor/nova:posts";
-import Comments from "meteor/nova:comments";
-
 RSS = Npm.require('rss');
 
 getMeta = function (url) {

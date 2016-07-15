@@ -1,5 +1,3 @@
-import Users from 'meteor/nova:users';
-
 const notificationsGroup = {
   name: "notifications",
   order: 2

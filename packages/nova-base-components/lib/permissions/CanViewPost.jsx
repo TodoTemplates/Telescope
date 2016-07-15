@@ -1,5 +1,4 @@
 import React, { PropTypes, Component } from 'react';
-import Users from 'meteor/nova:users';
 
 const CanViewPost = ({user, post, children}) => {
   if (Users.can.viewPost(this.props.user, this.props.document)) {

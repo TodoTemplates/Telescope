@@ -1,15 +1,12 @@
 import React, { PropTypes, Component } from 'react';
-import { FormattedMessage, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import NovaForm from "meteor/nova:forms";
 //import { Messages } from "meteor/nova:core";
-import Users from 'meteor/nova:users';
 
-const UsersEdit = (props, context) => {
+const UsersEdit = ({document, currentUser}, context) => {
 
-  const user = props.user;
-  const currentUser = props.currentUser;
-
+  const user = document;
   //const label = `Edit profile for ${Users.getDisplayName(user)}`;
 
   return (
@@ -22,7 +19,7 @@ const UsersEdit = (props, context) => {
           document={user} 
           methodName="users.edit"
           successCallback={(user)=>{
-            context.messages.flash(this.context.intl.formatMessage({id: "users.edit_success"}, {name: Users.getUsername(user)}), 'success')
+            context.messages.flash("User updated.", "success");
           }}
         />
       </div>
@@ -32,13 +29,12 @@ const UsersEdit = (props, context) => {
 
   
 UsersEdit.propTypes = {
-  user: React.PropTypes.object.isRequired,
+  document: React.PropTypes.object.isRequired,
   currentUser: React.PropTypes.object.isRequired
 };
 
 UsersEdit.contextTypes = {
-  messages: React.PropTypes.object,
-  intl: intlShape
+  messages: React.PropTypes.object
 };
 
 UsersEdit.displayName = "UsersEdit";

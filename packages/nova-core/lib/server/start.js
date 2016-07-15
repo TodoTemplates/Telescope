@@ -1,5 +1,4 @@
 import {Inject} from 'meteor/meteorhacks:inject-initial';
-import Events from "meteor/nova:events";
 
 Meteor.startup(function () {
   Events.log({

@@ -1,8 +1,6 @@
 import React, { PropTypes, Component } from 'react';
-import Users from 'meteor/nova:users';
-import { Link } from 'react-router';
 
-const UsersName = ({user}) => <Link className="users-name" to={Users.getProfileUrl(user)}>{Users.getDisplayName(user)}</Link>
+const UsersName = ({user}) => <a className="users-name" href={Users.getProfileUrl(user)}>{Users.getDisplayName(user)}</a>
 
 UsersName.propTypes = {
   user: React.PropTypes.object.isRequired,

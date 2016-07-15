@@ -1,11 +1,8 @@
-import Posts from './collection.js';
-import NovaEmail from 'meteor/nova:email';
-
 const getPost = (postId) => {
   return typeof Posts.findOne(postId) === "undefined" ? {post: Posts.findOne()} : {post: Posts.findOne(postId)};
 };
 
-NovaEmail.addEmails({
+Telescope.email.addEmails({
 
   newPost: {
     template: "newPost",

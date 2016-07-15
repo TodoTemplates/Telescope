@@ -1,19 +1,14 @@
-import Newsletter from '../namespace.js';
-import moment from 'moment';
+import Campaign from "./campaign.js";
 
 SyncedCron.options = {
-  log: true,
+  log: false,
   collectionName: 'cronHistory',
   utc: false,
   collectionTTL: 172800
 };
 
-const addZero = num => {
-  return num < 10 ? "0"+num : num;
-};
-
 var defaultFrequency = 7; // once a week
-var defaultTime = '00:00'; // GMT
+var defaultTime = '00:00';
 
 var getSchedule = function (parser) {
   var frequency = Telescope.settings.get('newsletterFrequency', defaultFrequency);
@@ -28,17 +23,7 @@ var getSchedule = function (parser) {
     schedule = recur.on(2).dayOfWeek();
   }
 
-  const offsetInMinutes = new Date().getTimezoneOffset();
-  const GMTtime = moment.duration(Telescope.settings.get('newsletterTime', defaultTime));
-  const serverTime = GMTtime.subtract(offsetInMinutes, "minutes");
-  const serverTimeString = addZero(serverTime.hours()) + ":" + addZero(serverTime.minutes());
-
-  console.log("// scheduled for: (GMT): "+Telescope.settings.get('newsletterTime', defaultTime));
-  console.log("// server offset (minutes): "+offsetInMinutes);
-  console.log("// server scheduled time (minutes): "+serverTime.asMinutes());
-  console.log("// server scheduled time: "+serverTimeString);
-
-  return schedule.on(serverTimeString).time();
+  return schedule.on(Telescope.settings.get('newsletterTime', defaultTime)).time();
 };
 
 Meteor.methods({
@@ -58,10 +43,8 @@ var addJob = function () {
     },
     job: function() {
       // only schedule newsletter campaigns in production
-      if (process.env.NODE_ENV === "production" || Telescope.settings.get("enableNewsletterInDev", false)) {
-        console.log("// Scheduling newsletter…")
-        console.log(new Date());
-        Newsletter.scheduleNextWithMailChimp();
+      if (process.env.NODE_ENV === "production") {
+        Campaign.scheduleNextWithMailChimp();
       }
     }
   });

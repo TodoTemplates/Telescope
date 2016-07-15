@@ -1,6 +1,4 @@
 import NewsletterSubscribe from './components/NewsletterSubscribe.jsx';
-import Posts from "meteor/nova:posts";
-import Users from 'meteor/nova:users';
 
 Posts.addField({
   fieldName: 'scheduledAt',
@@ -42,17 +40,6 @@ if (typeof Telescope.settings.collection !== "undefined") {
         autoform: {
           group: 'newsletter',
           instructions: 'Enable newsletter (requires restart).'
-        }
-      }
-    },
-    {
-      fieldName: 'enableNewsletterInDev',
-      fieldSchema: {
-        type: Boolean,
-        optional: true,
-        autoform: {
-          group: 'newsletter',
-          instructions: 'Enable newsletter in development too (requires restart).'
         }
       }
     },
@@ -142,7 +129,7 @@ if (typeof Telescope.settings.collection !== "undefined") {
         defaultValue: '00:00',
         autoform: {
           group: 'newsletter',
-          instructions: 'Defaults to 00:00/12:00 AM. Time to send out newsletter if enabled (GMT).',
+          instructions: 'Defaults to 00:00/12:00 AM. Time to send out newsletter if enabled.',
           type: 'time'
         }
       }

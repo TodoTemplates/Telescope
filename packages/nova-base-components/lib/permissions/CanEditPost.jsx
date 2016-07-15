@@ -1,5 +1,4 @@
 import React, { PropTypes, Component } from 'react';
-import Users from 'meteor/nova:users';
 
 const CanEditPost = ({user, post, children}) => {
   if (Users.can.edit(user, post)) {

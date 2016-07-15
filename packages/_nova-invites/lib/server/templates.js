@@ -1,5 +1,5 @@
-import NovaEmail from 'meteor/nova:email';
+// import Email from 'meteor/nova:email';
 
-NovaEmail.addTemplates({
+Telescope.email.addTemplates({
   emailInvite: Assets.getText("lib/server/templates/emailInvite.handlebars")
 });

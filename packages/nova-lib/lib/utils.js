@@ -190,7 +190,7 @@ Telescope.utils.getShortUrl = function(post) {
 };
 
 Telescope.utils.getDomain = function(url) {
-  return url && urlObject.parse(url).hostname.replace('www.', '');
+  return urlObject.parse(url).hostname.replace('www.', '');
 };
 
 Telescope.utils.invitesEnabled = function() {

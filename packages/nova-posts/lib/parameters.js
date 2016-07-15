@@ -1,4 +1,4 @@
-import Posts from './collection.js'
+import Posts from './config'
 import moment from 'moment';
 
 /**

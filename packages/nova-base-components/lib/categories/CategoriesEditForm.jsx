@@ -4,7 +4,6 @@ import NovaForm from "meteor/nova:forms";
 import { DocumentContainer } from "meteor/utilities:react-list-container";
 //import { Messages } from "meteor/nova:core";
 //import Actions from "../actions.js";
-import Categories from "meteor/nova:categories";
 
 class CategoriesEditForm extends Component{
 

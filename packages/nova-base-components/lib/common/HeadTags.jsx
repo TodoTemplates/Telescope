@@ -1,27 +1,22 @@
 import React, { PropTypes, Component } from 'react';
-import Helmet from 'react-helmet';
+import { DocHead } from 'meteor/kadira:dochead';
 
 class HeadTags extends Component {
 	render() {
+		DocHead.removeDocHeadAddedTags();
 
-		const url = !!this.props.url ? this.props.url : Telescope.utils.getSiteUrl();
-		const title = !!this.props.title ? this.props.title : Telescope.settings.get("title", "Nova");
-		const description = !!this.props.description ? this.props.description : Telescope.settings.get("tagline");
+		const url = this.props.url ? this.props.url : Telescope.utils.getSiteUrl();
+		const title = this.props.title ? this.props.title : Telescope.settings.get("title", "Nova");
+		const description = this.props.description ? this.props.description : Telescope.settings.get("tagline");
 
-		// default image meta: logo url, else site image defined in settings
-		let image = !!Telescope.settings.get("siteImage") ? Telescope.settings.get("siteImage"): Telescope.settings.get("logoUrl");
-		
-		// overwrite default image if one is passed as props 
-		if (!!this.props.image) {
-			image = this.props.image; 
+		let image = Telescope.utils.getSiteUrl() + Telescope.settings.get("logoUrl");
+		if (!!this.props && !!this.props.image) {
+			image = this.props.image;
+		} else if (!!Telescope.settings.get("siteImage")) {
+			image = Telescope.settings.get("siteImage");
 		}
 
-		// add site url base if the image is stored locally
-		if (!!image && image.indexOf('//') === -1) {
-			image = Telescope.utils.getSiteUrl() + image;
-		}
-
-		const meta = [
+		const metas = [
 			{ charset: "utf-8" },
 			{ name: "description", content: description },
 			// responsive
@@ -39,14 +34,16 @@ class HeadTags extends Component {
 			{ name: "twitter:description", content: description }
 		];
 
-		const link = [
+		const links = [
 			{ rel: "canonical", href: Telescope.utils.getSiteUrl() },
 			{ rel: "shortcut icon", href: Telescope.settings.get("favicon", "/img/favicon.ico") }
 		];
 
 		return (
 			<div>
-				<Helmet title={title} meta={meta} link={link} />
+				{ DocHead.setTitle(title) }
+				{ metas.map(meta => DocHead.addMeta(meta)) }
+				{ links.map(link => DocHead.addLink(link)) }
 			</div>
 		);
 	}

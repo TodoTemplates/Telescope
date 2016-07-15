@@ -1,6 +1,3 @@
-import Comments from './collection.js';
-import Posts from "meteor/nova:posts";
-
 Comments.getNotificationProperties = function (data) {
   const comment = data.comment;
   var commentAuthor = Meteor.users.findOne(comment.userId);

@@ -1,5 +1,4 @@
 import React from 'react';
-import Posts from "meteor/nova:posts";
 
 const PostsThumbnail = ({post}) => {
   return (

@@ -30,7 +30,6 @@ Note that both versions use the same data format, so you can go back and forth b
   - [Posts Parameters](#posts-parameters)
   - [Forms](#forms)
   - [Methods](#methods)
-  - [Routes](#routes)
   - [Internationalization](#internationalization)
   - [Cheatsheet](#cheatsheet)
 
@@ -241,7 +240,7 @@ Nova tries to maintain a consistent file structure for its main packages:
 - `collection.js`: the package's collection schema.
 - `callbacks.js`: callbacks used by the package.
 - `helpers.js`: collection helpers.
-- `methods.js`: collection methods.
+- `methods.js`: collectiom methods.
 - `published_fields.js`: specifies which collection fields should be published in which context.
 - `custom_fields.js`: sets custom fields on *other* collections.
 - `routes.jsx`: routes.
@@ -473,18 +472,6 @@ See [nova:forms](https://github.com/TelescopeJS/Telescope/tree/devel/packages/no
 
 You can use regular Meteor methods, or [Smart Methods](https://github.com/meteor-utilities/smart-methods).
 
-## Routes
-
-Here's how you can add routes to your app (using React Router):
-
-```js
-Telescope.routes.add({
-  name: "foo",
-  path: "/foo",
-  component: Foo
-});
-```
-
 ## Internationalization
 
 Nova is internationalized using [react-intl](https://github.com/yahoo/react-intl/). To add a new language, you need to:
@@ -497,9 +484,7 @@ Note: make sure the locale you set matches the language package you're adding.
 
 If you create a new internationalization package, let us know so we can add it here!
 
-- [fr-FR](https://github.com/TelescopeJS/nova-i18n-fr-fr)
-- [es-ES](https://atmospherejs.com/fcallem/nova-i18n-es-es)
-- [ru-RU](https://github.com/fortunto2/nova-i18n-ru-ru)
+- [fr_FR](https://github.com/TelescopeJS/nova-i18n-fr-fr)
 
 ## Cheatsheet
 

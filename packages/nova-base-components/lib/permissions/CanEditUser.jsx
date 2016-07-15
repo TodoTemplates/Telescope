@@ -1,5 +1,4 @@
 import React, { PropTypes, Component } from 'react';
-import Users from 'meteor/nova:users';
 
 const CanEditUser = ({user, userToEdit, children}) => {
   if (!user){

@@ -81,7 +81,6 @@ class Tags extends Component {
               suggestions={this.state.suggestions}
               handleDelete={this.handleDelete}
               handleAddition={this.handleAddition}
-              minQueryLength={1}
               classNames={{
                 // tags: 'tagsClass',
                 // tagInput: 'form-control'

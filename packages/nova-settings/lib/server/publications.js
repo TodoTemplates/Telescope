@@ -1,5 +1,3 @@
-import Users from 'meteor/nova:users';
-
 // Meteor.publish('settings', function() {
 //   var options = {};
 //   var privateFields = {};

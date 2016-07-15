@@ -2,7 +2,6 @@ import React, { PropTypes, Component } from 'react';
 import Actions from "../actions.js";
 import { Button } from 'react-bootstrap';
 import { Messages } from "meteor/nova:core";
-import NovaEmail from 'meteor/nova:email';
 
 const Loading = Telescope.components.Loading;
 
@@ -19,7 +18,7 @@ class Email extends Component {
   sendTest() {
     this.setState({loading: true});
 
-    Actions.call("email.test", this.props.name, (error, result) => {
+    Actions.call("testEmail", this.props.name, (error, result) => {
       this.setState({loading: false});
       if (error) {
         Messages.flash(error.message, "error");
@@ -57,7 +56,7 @@ Email.propTypes = {
 
 const Emails = props => {
 
-  const emails = NovaEmail.emails;
+  const emails = Telescope.email.emails;
 
   return (
     <div className="emails">

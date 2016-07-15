@@ -1,19 +1,18 @@
-import Newsletter from "../namespace.js";
-import MailChimpList from "./mailchimp/mailchimp_list.js";
-import Users from 'meteor/nova:users';
+import Campaign from "./campaign.js";
+import MailChimpList from "./mailchimp.js";
 
 Meteor.methods({
-  'newsletter.send': function () {
+  sendCampaign: function () {
     if(Users.is.adminById(this.userId))
-      return Newsletter.scheduleNextWithMailChimp(false);
+      return Campaign.scheduleNextWithMailChimp(false);
   },
-  'newsletter.test': function () {
+  testCampaign: function () {
     if(Users.is.adminById(this.userId))
-      return Newsletter.scheduleNextWithMailChimp(true);
+      return Campaign.scheduleNextWithMailChimp(true);
   },
   'newsletter.addUser'(user){
     if (!user || !Users.can.editById(this.userId, user)) {
-      throw new Meteor.Error(601, 'sorry_you_cannot_edit_this_user');
+      throw new Meteor.Error(601, __('sorry_you_cannot_edit_this_user'));
     }
     
     try {
@@ -24,7 +23,7 @@ Meteor.methods({
   },
   'newsletter.removeUser'(user) {
     if (!user || !Users.can.editById(this.userId, user)) {
-      throw new Meteor.Error(601, 'sorry_you_cannot_edit_this_user');
+      throw new Meteor.Error(601, __('sorry_you_cannot_edit_this_user'));
     }
     
     try {

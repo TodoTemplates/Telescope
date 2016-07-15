@@ -1,23 +1,22 @@
-import NovaEmail from '../namespace.js';
 import Juice from 'juice';
 import htmlToText from 'html-to-text';
 import Handlebars from 'handlebars';
 
-NovaEmail.templates = {};
+Telescope.email.templates = {};
 
-NovaEmail.addTemplates = function (templates) {
-  _.extend(NovaEmail.templates, templates);
+Telescope.email.addTemplates = function (templates) {
+  _.extend(Telescope.email.templates, templates);
 };
 
 // for template "foo", check if "custom_foo" exists. If it does, use it instead
-NovaEmail.getTemplate = function (templateName) {
+Telescope.email.getTemplate = function (templateName) {
 
   var template = templateName;
 
   // note: template prefixes are disabled
   // go through prefixes and keep the last one (if any) that points to a valid template
   // Telescope.config.customPrefixes.forEach(function (prefix) {
-  //   if(typeof NovaEmail.templates[prefix+templateName] === 'string'){
+  //   if(typeof Telescope.email.templates[prefix+templateName] === 'string'){
   //     template = prefix + templateName;
   //   }
   // });
@@ -25,15 +24,15 @@ NovaEmail.getTemplate = function (templateName) {
   // return Handlebars.templates[template];
 
   // console.log(templateName)
-  // console.log(NovaEmail.templates[template])
+  // console.log(Telescope.email.templates[template])
 
-  return Handlebars.compile(NovaEmail.templates[template], {
+  return Handlebars.compile(Telescope.email.templates[template], {
     noEscape: true
   });
 
 };
 
-NovaEmail.buildTemplate = function (htmlContent) {
+Telescope.email.buildTemplate = function (htmlContent) {
 
   var emailProperties = {
     secondaryColor: Telescope.settings.get('secondaryColor', '#444444'),
@@ -50,7 +49,7 @@ NovaEmail.buildTemplate = function (htmlContent) {
     logoWidth: Telescope.settings.get('logoWidth')
   };
 
-  var emailHTML = NovaEmail.getTemplate("wrapper")(emailProperties);
+  var emailHTML = Telescope.email.getTemplate("wrapper")(emailProperties);
 
   var inlinedHTML = Juice(emailHTML, {preserveMediaQueries: true});
 
@@ -59,7 +58,7 @@ NovaEmail.buildTemplate = function (htmlContent) {
   return doctype+inlinedHTML;
 };
 
-NovaEmail.send = function(to, subject, html, text){
+Telescope.email.send = function(to, subject, html, text){
 
   // TODO: limit who can send emails
   // TODO: fix this error: Error: getaddrinfo ENOTFOUND
@@ -95,11 +94,51 @@ NovaEmail.send = function(to, subject, html, text){
   return email;
 };
 
-NovaEmail.buildAndSend = function (to, subject, template, properties) {
-  var html = NovaEmail.buildTemplate(NovaEmail.getTemplate(template)(properties));
-  return NovaEmail.send (to, subject, html);
+Telescope.email.buildAndSend = function (to, subject, template, properties) {
+  var html = Telescope.email.buildTemplate(Telescope.email.getTemplate(template)(properties));
+  return Telescope.email.send (to, subject, html);
 };
 
-NovaEmail.buildAndSendHTML = function (to, subject, html) {
-  return NovaEmail.send (to, subject, NovaEmail.buildTemplate(html));
+Telescope.email.buildAndSendHTML = function (to, subject, html) {
+  return Telescope.email.send (to, subject, Telescope.email.buildTemplate(html));
 };
+
+Meteor.methods({
+  testEmail: function (emailName) {
+    
+    const email = Telescope.email.emails[emailName];
+    
+    if(Users.is.adminById(this.userId)){
+
+      console.log("// testing email ["+emailName+"]");
+      let html, properties;
+    
+      // if email has a custom way of generating its HTML, use it
+      if (typeof email.getTestHTML !== "undefined") {
+
+        html = email.getTestHTML.bind(email)();
+
+      } else {
+
+        // else get test object (sample post, comment, user, etc.)
+        const testObject = email.getTestObject();
+        // get test object's email properties
+        properties = email.getProperties(testObject);
+
+        // then apply email template to properties, and wrap it with buildTemplate
+        html = Telescope.email.buildTemplate(Telescope.email.getTemplate(email.template)(properties));
+
+      }
+
+      // get subject
+      const subject = "[Test] " + email.subject.bind(email)(properties);
+
+      Telescope.email.send (Telescope.settings.get('defaultEmail'), subject, html)
+ 
+      return subject;
+    
+    } else {
+      throw new Meteor.Error("must_be_admin", "You must be an admin to send test emails");
+    }
+  }
+});

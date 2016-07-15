@@ -1,5 +1,3 @@
-import Categories from "../collection.js";
-
 // Load categories from settings, if there are any
 
 if (Meteor.settings && Meteor.settings.categories) {

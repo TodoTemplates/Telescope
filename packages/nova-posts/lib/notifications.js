@@ -1,5 +1,4 @@
-import Posts from './collection.js'
-import Users from 'meteor/nova:users';
+import Posts from './config'
 
 Posts.getNotificationProperties = function (data) {
   const post = data.post;

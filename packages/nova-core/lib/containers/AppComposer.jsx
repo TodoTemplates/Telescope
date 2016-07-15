@@ -1,6 +1,5 @@
 import { composeWithTracker } from 'react-komposer';
 import Messages from '../messages.js';
-import Events from "meteor/nova:events";
 
 function composer(props, onData) {
 

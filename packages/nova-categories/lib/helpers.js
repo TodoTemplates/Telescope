@@ -1,5 +1,3 @@
-import Posts from "meteor/nova:posts";
-import Categories from "./collection.js";
 
 /**
  * @summary Get all of a category's parents
