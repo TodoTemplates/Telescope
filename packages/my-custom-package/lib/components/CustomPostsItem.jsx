@@ -6,6 +6,7 @@ import { ModalTrigger } from "meteor/nova:core";
 import { Link } from 'react-router';
 import Posts from "meteor/nova:posts";
 import Categories from "meteor/nova:categories";
+import Users from 'meteor/nova:users';
 
 class CustomPostsItem extends Telescope.components.PostsItem {
 
@@ -43,7 +44,7 @@ renderActions() {
       postClass += " post-"+post.color;
     }
 
-    
+
     // ⭐ custom code ends here ⭐
 
     return (

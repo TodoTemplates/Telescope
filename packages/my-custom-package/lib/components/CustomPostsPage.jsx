@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 const CustomPostsPage = ({document, currentUser}) => {
 
@@ -13,6 +14,8 @@ const CustomPostsPage = ({document, currentUser}) => {
 
       <Telescope.components.PostsItem post={post}/>
 
+      <div className="posts-page-body" dangerouslySetInnerHTML={htmlBody}></div>
+
       <div className="posts-preview-body">
         <ul className="mdl-list">
           {post.preview.map((name, index) =>
@@ -24,8 +27,11 @@ const CustomPostsPage = ({document, currentUser}) => {
         </ul>
       </div>
 
-      <div className="posts-page-body" dangerouslySetInnerHTML={htmlBody}></div>
-
+      <div className="post-import-large">
+          <Link to={Posts.getLink(post)} className="btn btn-primary" target="_blank">
+            Import This Project
+          </Link>
+      </div>
 
       {/*<SocialShare url={ Posts.getLink(post) } title={ post.title }/>*/}
 

@@ -16,7 +16,7 @@ nova:categories
 nova:share
 nova:voting
 nova:forms
-# nova:embedly
+nova:embedly
 nova:api
 nova:rss
 nova:kadira

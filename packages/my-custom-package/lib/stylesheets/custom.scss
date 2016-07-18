@@ -1,6 +1,44 @@
+.mdl-list__item-icon, .mdl-list__item-icon.material-icons {
+  margin-right:12px;
+}
+
+.badge1 {
+   position:relative;
+}
+.badge1[data-badge]:after {
+   content:attr(data-badge);
+   position:absolute;
+   top:-8px;
+   right:-13px;
+   font-size:.7em;
+   background:#65655E;
+   color:white;
+   width:18px;height:18px;
+   text-align:center;
+   line-height:18px;
+   border-radius:50%;
+   box-shadow:0 0 1px #333;
+}
+
 .posts-preview-body {
 width: 80%;
 margin: auto;
+}
+
+.post-import-large {
+  margin:auto;
+  display:flex;
+  width: 20%;
+}
+
+.nav-links a {
+  color:#fff!important;
+  margin-right: 40px;
+  font-size: larger;
+}
+
+.nav .nav-user {
+  margin-right:30px;
 }
 
 .material-icons .mdl-list__item-icon {
@@ -93,6 +131,7 @@ h1 .logo-text a:focus, a:hover {
 
 .logo .tagline {
   color: #fff;
+  margin-left:40px;
 }
 
 .header-wrapper {
