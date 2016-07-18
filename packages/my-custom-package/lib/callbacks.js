@@ -1,6 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 import { HTTP } from 'meteor/http';
 
+function validateURL(textval) {
+    var urlregex = /^(https?|ftp):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/;
+    return urlregex.test(textval);
+};
+
 function cleanURL(originalURL) {
   var noTodoistURL = originalURL.replace('https://todoist.com/importFromTemplate?t_url=', '');
   var decodedURL = decodeURIComponent(noTodoistURL);
@@ -66,22 +71,24 @@ function csvToArray(csv, delimiter) {
 
 
 function PostsNewAddPreview(post) {
-  var csvURL = post.url;
-  var cleanedURL = cleanURL(csvURL);
-  var csvData;
 
-  csvDataresp = HTTP.call('GET', cleanedURL, {});
+  if (validateURL(post.url)) {
+    var csvURL = post.url;
+    var cleanedURL = cleanURL(csvURL);
+    var csvData;
 
-  csvData = csvDataresp.content;
-  var objArray = csvToArray(csvData, ',');
-  var strArray = objArray.map(function (item) {
-    if (item.TYPE == 'task')
-    return item.CONTENT;});
+    csvDataresp = HTTP.call('GET', cleanedURL, {});
 
-  var strArraynospc = strArray.filter(v=> v != '' && v != null);
+    csvData = csvDataresp.content;
+    var objArray = csvToArray(csvData, ',');
+    var strArray = objArray.map(function (item) {
+      if (item.TYPE == 'task')
+      return item.CONTENT;});
 
-  Posts.update(post._id, { $set: { preview: strArraynospc } });
+    var strArraynospc = strArray.filter(v=> v != '' && v != null);
 
+    Posts.update(post._id, { $set: { preview: strArraynospc } });
+  }
 }
 
 Telescope.callbacks.add('posts.new.async', PostsNewAddPreview);

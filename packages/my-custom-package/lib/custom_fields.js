@@ -1,12 +1,6 @@
 import Posts from "meteor/nova:posts";
 import Users from 'meteor/nova:users';
 
-/*
-Let's assign a color to each post (why? cause we want to, that's why).
-We'll do that by adding a custom field to the Posts collection.
-Note that this requires our custom package to depend on nova:posts and nova:users.
-*/
-
 Posts.addField(
   {
     fieldName: 'color',
