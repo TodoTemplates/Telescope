@@ -1,6 +1,14 @@
 import { Meteor } from 'meteor/meteor';
 import { HTTP } from 'meteor/http';
 
+
+function addUnsplashThumbnail (post){
+  if (!post.thumbnailUrl){
+    post.unsplashNumber = Math.floor(Math.random() * (1080)) + 1;
+    Posts.update(post._id, { $set: { thumbnailUrl: "https://unsplash.it/275/200?image=" + post.unsplashNumber} });
+  }
+};
+
 function validateURL(textval) {
     var urlregex = /^(https?|ftp):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/;
     return urlregex.test(textval);
@@ -69,7 +77,6 @@ function csvToArray(csv, delimiter) {
 };
 
 
-
 function PostsNewAddPreview(post) {
 
   if (validateURL(post.url)) {
@@ -93,3 +100,5 @@ function PostsNewAddPreview(post) {
 
 Telescope.callbacks.add('posts.new.async', PostsNewAddPreview);
 Telescope.callbacks.add('posts.edit.async', PostsNewAddPreview);
+//Telescope.callbacks.add('posts.new.async', addUnsplashThumbnail);
+//Telescope.callbacks.add('posts.edit.async', addUnsplashThumbnail);

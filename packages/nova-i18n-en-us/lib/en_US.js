@@ -2,7 +2,7 @@ Telescope.strings.en = {
   "forms.submit": "Submit",
   "forms.cancel": "Cancel",
 
-  "posts.new_post": "New Post",
+  "posts.new_post": "Upload Template",
   "posts.edit": "Edit",
   "posts.edit_success": "Post “{title}” edited.",
   "posts.delete": "Delete",
@@ -109,15 +109,15 @@ Telescope.strings.en = {
   "settings.requirePostInvite": "Require Post Invite",
   "settings.requirePostsApproval": "Require Posts Approval",
   "settings.scoreUpdateInterval": "Score Update Interval",
-  
+
   "app.loading": "Loading…",
   "app.404": "Sorry, we couldn't find what you were looking for.",
   "app.powered_by": "Powered by Telescope",
   "app.or": "Or",
 
-  "newsletter": "Newsletter", 
-  "newsletter.subscribe": "Subscribe", 
-  "newsletter.unsubscribe": "Unsubscribe", 
+  "newsletter": "Newsletter",
+  "newsletter.subscribe": "Subscribe",
+  "newsletter.unsubscribe": "Unsubscribe",
   "newsletter.subscribe_prompt": "Subscribe to the newsletter",
   "newsletter.email": "Your email",
   "newsletter.success_message": "Thanks for subscribing!",

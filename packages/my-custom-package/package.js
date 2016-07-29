@@ -16,7 +16,8 @@ Package.onUse( function(api) {
   ]);
 
   api.addFiles([
-    'lib/modules.js'
+    'lib/modules.js',
+    'lib/CustomIcons.js'
   ], ['client', 'server']);
 
   api.addFiles([

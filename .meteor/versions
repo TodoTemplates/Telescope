@@ -98,6 +98,7 @@ nova:base-components@0.26.4-nova
 nova:base-routes@0.26.4-nova
 nova:base-styles@0.26.4-nova
 nova:categories@0.26.4-nova
+nova:cloudinary@0.26.4-nova
 nova:comments@0.26.4-nova
 nova:core@0.26.4-nova
 nova:debug@0.26.4-nova

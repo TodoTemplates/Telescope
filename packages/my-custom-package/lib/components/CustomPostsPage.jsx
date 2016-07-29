@@ -14,9 +14,10 @@ const CustomPostsPage = ({document, currentUser}) => {
 
       <Telescope.components.PostsItem post={post}/>
 
-      <div className="posts-page-body" dangerouslySetInnerHTML={htmlBody}></div>
+      {post.body ? <div className="posts-page-body container" dangerouslySetInnerHTML={htmlBody}></div> : null}
 
       <div className="posts-preview-body">
+        <span className="posts-preview-body-title">Preview</span>
         <ul className="mdl-list">
           {post.preview.map((name, index) =>
             <li className="mdl-list__item" key={ index }>
@@ -46,8 +47,8 @@ const CustomPostsPage = ({document, currentUser}) => {
 
         <Telescope.components.PostsItem post={post}/>
 
-        <div className="posts-page-body" dangerouslySetInnerHTML={htmlBody}></div>
-
+        {post.body ? <div className="posts-page-body container" dangerouslySetInnerHTML={htmlBody}></div> : null}
+        
         {/*<SocialShare url={ Posts.getLink(post) } title={ post.title }/>*/}
 
         <Telescope.components.PostsCommentsThread document={post} currentUser={currentUser}/>

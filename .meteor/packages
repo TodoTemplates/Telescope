@@ -45,3 +45,4 @@ service-configuration
 static-html
 meteortoys:allthings
 http
+nova:cloudinary

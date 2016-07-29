@@ -38,6 +38,32 @@ Posts.addField(
   }
 );
 
+Posts.addField(
+  {
+    fieldName: 'unsplashNumber',
+    fieldSchema: {
+      type: String,
+      optional: true, // this field is not required
+      publish: true // make that field public and send it to the client
+    }
+  }
+);
+
+Posts.addField(
+  {
+    fieldName: 'description',
+    fieldSchema: {
+      type: String,
+      optional: false, // this field is not required
+      publish: true, // make that field public and send it to the client
+      insertableIf: Users.is.memberOrAdmin, // insertable by regular logged in users and admins
+      editableIf: Users.is.ownerOrAdmin, // editable by the post's owner or admins
+      order: 21,
+      control: "text",
+      max: 500
+    }
+  }
+);
 /*
 The main post list view uses a special object to determine which fields to publish,
 so we also add our new field to that object:
@@ -47,3 +73,5 @@ import PublicationUtils from 'meteor/utilities:smart-publications';
 
 PublicationUtils.addToFields(Posts.publishedFields.list, ["color"]);
 PublicationUtils.addToFields(Posts.publishedFields.list, ["preview"]);
+PublicationUtils.addToFields(Posts.publishedFields.list, ["unsplashNumber"]);
+PublicationUtils.addToFields(Posts.publishedFields.list, ["description"]);

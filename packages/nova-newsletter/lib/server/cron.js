@@ -22,10 +22,10 @@ var getSchedule = function (parser) {
 
   // Default is once a week (Mondays)
   if (!!frequency) {
-    schedule = recur.on(frequency).dayOfWeek();
+    schedule = recur.on(frequency).dayOfMonth();
   }
   else {
-    schedule = recur.on(2).dayOfWeek();
+    schedule = recur.on(2).dayOfMonth();
   }
 
   const offsetInMinutes = new Date().getTimezoneOffset();

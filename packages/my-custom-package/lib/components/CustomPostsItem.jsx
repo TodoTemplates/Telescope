@@ -14,7 +14,7 @@ class CustomPostsItem extends Telescope.components.PostsItem {
 
     const post = this.props.post;
 
-    let postClass = "posts-item";
+    let postClass = "mdl-list__item mdl-list__item--three-line";
     if (post.sticky) postClass += " posts-sticky";
 
     // ⭐ custom code starts here ⭐
@@ -24,46 +24,42 @@ class CustomPostsItem extends Telescope.components.PostsItem {
 
     // ⭐ custom code ends here ⭐
 
+
     return (
+
+
       <div className={postClass}>
+        <div className="mdl-list__item-primary-content">
 
-        <div className="posts-item-vote">
-          <Telescope.components.Vote post={post} currentUser={this.context.currentUser}/>
-        </div>
+          {post.user? <div className="mdl-list__item-avatar"><Telescope.components.UsersAvatar user={post.user} size="large"/></div> : null}
 
-        {post.thumbnailUrl ? <Telescope.components.PostsThumbnail post={post}/> : null}
-
-        <div className="posts-item-content">
-
-          <h3 className="posts-item-title">
+          <div className="posts-item-title-link">
             <Link to={Posts.getPageUrl(post)} className="posts-item-title-link">
               {post.title}
-            </Link>
-            {this.renderCategories()}
-          </h3>
-
-          <div className="posts-item-meta">
-            {post.user? <div className="posts-item-user"><Telescope.components.UsersAvatar user={post.user} size="small"/><Telescope.components.UsersName user={post.user}/></div> : null}
-            <div className="posts-item-date"><FormattedRelative value={post.postedAt}/></div>
-            <div className="posts-item-comments">
-              <Link to={Posts.getPageUrl(post)}>
-                <FormattedMessage id="comments.count" values={{count: post.commentCount}}/>
-              </Link>
-            </div>
-            {(this.context.currentUser && this.context.currentUser.isAdmin) ?<Telescope.components.PostsStats post={post} />:null}
-            {this.renderActions()}
+            </Link>  {this.renderCategories()}
           </div>
 
-        </div>
-
-        {this.renderCommenters()}
-        <div className="posts-item-import">
-          <Link to={Posts.getLink(post)} className="post-import" target="_blank">
-            Import
-          </Link>
-        </div>
-
+          <span className="mdl-list__item-text-body">
+            <Link to={Posts.getPageUrl(post)} className="mdl-list__item-text-body-link">
+              {post.description}
+            </Link>
+            &nbsp; - {post.user? <Telescope.components.UsersName user={post.user}/> : null}
+            {(this.context.currentUser && this.context.currentUser.isAdmin) ?<Telescope.components.PostsStats post={post} />:null}
+            {this.renderActions()}
+          </span>
+          </div>
+          <div className="mdl-list__item-secondary-content">
+            <div className="mdl-list__item-secondary-action-hover">
+              <Telescope.components.Vote post={post} currentUser={this.context.currentUser}/>
+            </div>
+            <div className="mdl-list__item-secondary-action">
+              <Link to={Posts.getLink(post)} className="post-import" target="_blank">
+                <i className="icon fa fa-fw fa-download" aria-hidden="true"></i> Import
+              </Link>
+            </div>
+          </div>
       </div>
+
     )
   }
 };

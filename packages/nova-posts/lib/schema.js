@@ -251,7 +251,7 @@ Posts.schemaJSON = {
     publish: true,
   },
   /**
-    The post author's `_id`. 
+    The post author's `_id`.
   */
   userId: {
     type: String,
