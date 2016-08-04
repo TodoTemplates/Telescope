@@ -106,7 +106,7 @@ Posts.before.update(function (userId, doc, fieldNames, modifier) {
  */
 function PostsNewUserCheck (post, user) {
   // check that user can post
-  if (!user || !Users.can.post(user))
+  if (!user || !Users.canDo(user, "posts.new"))
     throw new Meteor.Error(601, 'you_need_to_login_or_be_invited_to_post_new_stories');
   return post;
 }
@@ -117,7 +117,7 @@ Telescope.callbacks.add("posts.new.method", PostsNewUserCheck);
  */
 function PostsNewRateLimit (post, user) {
 
-  if(!Users.is.admin(user)){
+  if(!Users.isAdmin(user)){
 
     var timeSinceLastPost = Users.timeSinceLast(user, Posts),
       numberOfPostsInPast24Hours = Users.numberOfItemsInPast24Hours(user, Posts),
@@ -155,7 +155,7 @@ function PostsNewSubmittedPropertiesCheck (post, user) {
   _.keys(post).forEach(function (fieldName) {
 
     var field = schema[fieldName];
-    if (!Users.can.submitField(user, field)) {
+    if (!Users.canSubmitField (user, field)) {
       throw new Meteor.Error("disallowed_property", 'disallowed_property_detected' + ": " + fieldName);
     }
 
@@ -224,7 +224,7 @@ Telescope.callbacks.add("posts.new.sync", PostsNewRequiredPropertiesCheck);
  * @summary Set the post's isFuture to true if necessary
  */
 function PostsNewSetFuture (post, user) {
-  post.isFuture = post.postedAt > post.createdAt;
+  post.isFuture = post.postedAt.getTime() > post.createdAt.getTime() + 1000; // round up to the second
   return post;
 }
 Telescope.callbacks.add("posts.new.sync", PostsNewSetFuture);
@@ -283,7 +283,7 @@ Telescope.callbacks.add("posts.new.async", PostsNewNotifications);
 
 function PostsEditUserCheck (modifier, post, user) {
   // check that user can edit document
-  if (!user || !Users.can.edit(user, post)) {
+  if (!user || !Users.canEdit(user, post)) {
     throw new Meteor.Error(601, 'sorry_you_cannot_edit_this_post');
   }
   return modifier;
@@ -299,7 +299,7 @@ function PostsEditSubmittedPropertiesCheck (modifier, post, user) {
     _.keys(operation).forEach(function (fieldName) {
 
       var field = schema[fieldName];
-      if (!Users.can.editField(user, field, post)) {
+      if (!Users.canEditField(user, field, post)) {
         throw new Meteor.Error("disallowed_property", 'disallowed_property_detected' + ": " + fieldName);
       }
 
@@ -331,7 +331,7 @@ Telescope.callbacks.add("posts.edit.sync", PostsEditForceStickyToFalse);
  */
 function PostsEditSetIsFuture (modifier, post) {
   // if a post's postedAt date is in the future, set isFuture to true
-  modifier.$set.isFuture = modifier.$set.postedAt > new Date();
+  modifier.$set.isFuture = modifier.$set.postedAt.getTime() > new Date().getTime() + 1000;
   return modifier;
 }
 Telescope.callbacks.add("posts.edit.sync", PostsEditSetIsFuture);

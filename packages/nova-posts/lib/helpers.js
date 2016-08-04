@@ -2,6 +2,9 @@ import moment from 'moment';
 import Posts from './collection.js';
 import Users from 'meteor/nova:users';
 
+Posts.helpers({getCollection: () => Posts});
+Posts.helpers({getCollectionName: () => "posts"});
+
 //////////////////
 // Link Helpers //
 //////////////////
@@ -68,9 +71,9 @@ Posts.helpers({getAuthorName: function () {return Posts.getAuthorName(this);}});
  * @param {Object} user
  */
 Posts.getDefaultStatus = function (user) {
-  var hasAdminRights = typeof user === 'undefined' ? false : Users.is.admin(user);
-  if (hasAdminRights || !Telescope.settings.get('requirePostsApproval', false)) {
-    // if user is admin, or else post approval is not required
+  const canPostApproved = typeof user === 'undefined' ? false : Users.canDo(user, "posts.new.approved");
+  if (!Telescope.settings.get('requirePostsApproval', false) || canPostApproved) {
+    // if user can post straight to "approved", or else post approval is not required
     return Posts.config.STATUS_APPROVED;
   } else {
     return Posts.config.STATUS_PENDING;
@@ -85,6 +88,16 @@ Posts.isApproved = function (post) {
   return post.status === Posts.config.STATUS_APPROVED;
 };
 Posts.helpers({isApproved: function () {return Posts.isApproved(this);}});
+
+/**
+ * @summary Check if a post is pending
+ * @param {Object} post
+ */
+Posts.isPending = function (post) {
+  return post.status === Posts.config.STATUS_PENDING;
+};
+Posts.helpers({isPending: function () {return Posts.isPending(this);}});
+
 
 /**
  * @summary Check to see if post URL is unique.
@@ -166,36 +179,3 @@ ${Posts.getLink(post, true, false)}
 };
 Posts.helpers({ getEmailShareUrl() { return Posts.getEmailShareUrl(this); } });
 
-
-///////////////////
-// Users Helpers //
-///////////////////
-
-/**
- * @summary Check if a given user can view a specific post
- * @param {Object} user - can be undefined!
- * @param {Object} post
- */
-Users.can.viewPost = function (user, post) {
-
-  if (Users.is.admin(user)) {
-    return true;
-  } else {
-
-    switch (post.status) {
-
-      case Posts.config.STATUS_APPROVED:
-        return Users.can.view(user);
-      
-      case Posts.config.STATUS_REJECTED:
-      case Posts.config.STATUS_SPAM:
-      case Posts.config.STATUS_PENDING: 
-        return Users.can.view(user) && Users.is.owner(user, post);
-      
-      case Posts.config.STATUS_DELETED:
-        return false;
-    
-    }
-  }
-}
-Users.helpers({canViewPost: function () {return Users.can.viewPost(this, post);}});
