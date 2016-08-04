@@ -1,5 +1,5 @@
 Package.describe({
-  name: "my-custom-package"
+  name: "todotemplates-package"
 });
 
 Package.onUse( function(api) {

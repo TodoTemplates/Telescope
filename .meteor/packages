@@ -39,7 +39,7 @@ nova:debug
 
 ############ Your Packages ############
 
-my-custom-package
+todotemplates-package
 react-meteor-data
 service-configuration
 static-html

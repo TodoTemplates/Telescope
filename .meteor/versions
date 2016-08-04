@@ -92,7 +92,6 @@ mongo-id@1.0.4
 mongo-livedata@1.0.12
 msavin:jetsetter@2.0.0
 msavin:mongol@2.0.1
-my-custom-package@0.0.0
 nova:api@0.26.4-nova
 nova:base-components@0.26.4-nova
 nova:base-routes@0.26.4-nova
@@ -159,6 +158,7 @@ templating@1.1.9
 templating-tools@1.0.4
 tmeasday:check-npm-versions@0.3.1
 tmeasday:publish-counts@0.7.3
+todotemplates-package@0.0.0
 tracker@1.0.13
 twitter@1.1.9
 ui@1.0.11
