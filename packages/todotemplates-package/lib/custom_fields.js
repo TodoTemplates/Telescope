@@ -1,6 +1,11 @@
 import Posts from "meteor/nova:posts";
 import Users from 'meteor/nova:users';
 
+// check if user can create a new post
+const canInsert = user => Users.canDo(user, "posts.new");
+// check if user can edit a post
+const canEdit = Users.canEdit;
+
 Posts.addField(
   {
     fieldName: 'color',
@@ -8,8 +13,8 @@ Posts.addField(
       type: String,
       control: "select", // use a select form control
       optional: true, // this field is not required
-      insertableIf: Users.is.memberOrAdmin, // insertable by regular logged in users and admins
-      editableIf: Users.is.ownerOrAdmin, // editable by the post's owner or admins
+      insertableIf: canInsert, // insertable by regular logged in users and admins
+      editableIf: canEdit, // editable by the post's owner or admins
       autoform: {
         options: function () { // options for the select form control
           return [
@@ -56,8 +61,8 @@ Posts.addField(
       type: String,
       optional: false, // this field is not required
       publish: true, // make that field public and send it to the client
-      insertableIf: Users.is.memberOrAdmin, // insertable by regular logged in users and admins
-      editableIf: Users.is.ownerOrAdmin, // editable by the post's owner or admins
+      insertableIf: canInsert, // insertable by regular logged in users and admins
+      editableIf: canEdit, // editable by the post's owner or admins
       order: 21,
       control: "text",
       max: 500
