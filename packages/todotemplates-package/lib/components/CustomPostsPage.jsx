@@ -10,7 +10,6 @@ const CustomPostsPage = ({document, currentUser}) => {
   return (
     <div className="posts-page">
 
-      <Telescope.components.HeadTags url={Posts.getLink(post)} title={post.title} image={post.thumbnailUrl} />
 
       <Telescope.components.PostsItem post={post}/>
 
