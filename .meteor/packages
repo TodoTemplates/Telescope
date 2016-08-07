@@ -15,7 +15,7 @@ nova:getting-started
 nova:categories
 nova:voting
 nova:forms
-nova:embedly
+# nova:embedly
 nova:api
 nova:rss
 nova:kadira
@@ -43,6 +43,6 @@ todotemplates-package
 react-meteor-data
 service-configuration
 static-html
-meteortoys:allthings
+# meteortoys:allthings
 http
-nova:cloudinary
+# nova:cloudinary

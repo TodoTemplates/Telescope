@@ -48,7 +48,13 @@ const CustomPostsPage = ({document, currentUser}) => {
         <Telescope.components.PostsItem post={post}/>
 
         {post.body ? <div className="posts-page-body container" dangerouslySetInnerHTML={htmlBody}></div> : null}
-        
+
+        <div className="post-import-large">
+            <Link to={Posts.getLink(post)} className="btn btn-primary" target="_blank">
+              Import This Project
+            </Link>
+        </div>
+
         {/*<SocialShare url={ Posts.getLink(post) } title={ post.title }/>*/}
 
         <Telescope.components.PostsCommentsThread document={post} currentUser={currentUser}/>
