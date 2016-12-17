@@ -18,7 +18,7 @@ const Header = ({currentUser}) => {
         </div>
 
         <div className="nav">
-          <div className="nav-links"><a href="http://blog.todotemplates.com">Blog</a></div>
+          <div className="nav-links"><a href="http://blog.todotemplates.com" className="badge1" data-badge="1">Blog</a></div>
           <div className="nav-user">
             {currentUser ? <Telescope.components.UsersMenu user={currentUser}/> : <Telescope.components.UsersAccountMenu/>}
           </div>
