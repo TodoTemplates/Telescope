@@ -12,6 +12,7 @@ import CustomFooter from "./components/CustomFooter.jsx";
 import CustomUsersAvatar from "./components/CustomUsersAvatar.jsx";
 import CustomHeadTags from "./components/CustomHeadTags.jsx";
 import CustomHeader from "./components/CustomHeader.jsx";
+import CustomPostsNoMore from "./components/CustomPostsNoMore.jsx";
 
 Telescope.components.Logo = CustomLogo;
 Telescope.components.Newsletter = CustomNewsletter;
@@ -23,3 +24,4 @@ Telescope.components.Footer = CustomFooter;
 Telescope.components.UsersAvatar = CustomUsersAvatar;
 Telescope.components.HeadTags = CustomHeadTags;
 Telescope.components.Header = CustomHeader;
+Telescope.components.PostsNoMore = CustomPostsNoMore;

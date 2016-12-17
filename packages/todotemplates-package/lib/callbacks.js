@@ -98,6 +98,22 @@ function PostsNewAddPreview(post) {
   }
 }
 
+/*
+function newUserSendWelcomeEmail (user) {
+  // send welcome email
+
+      var emailProperties = {
+        profileUrl: Users.getProfileUrl(user, true),
+        username: Users.getUserName(user)
+      };
+      var html = NovaEmail.getTemplate('accountApproved')(emailProperties);
+      NovaEmail.send(Users.getEmail(user), 'Hi '+Users.getUserName(user)+', Welcome to To-Do Templates!', NovaEmail.buildTemplate(html));
+
+  return user;
+}
+Telescope.callbacks.add("onCreateUser", newUserSendWelcomeEmail);
+*/
+
 Telescope.callbacks.add('posts.new.async', PostsNewAddPreview);
 Telescope.callbacks.add('posts.edit.async', PostsNewAddPreview);
 //Telescope.callbacks.add('posts.new.async', addUnsplashThumbnail);

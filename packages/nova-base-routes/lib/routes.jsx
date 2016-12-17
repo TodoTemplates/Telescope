@@ -14,6 +14,7 @@ Telescope.routes.indexRoute = { name: "posts.list", component: Telescope.compone
 Meteor.startup(() => {
 
   Telescope.routes.add([
+    {name:"posts.daily",    path:"daily",              component:Telescope.components.PostsDaily},
     {name:"posts.single",   path:"posts/:_id(/:slug)", component:Telescope.components.PostsSingle},
     {name:"users.single",   path:"users/:slug",        component:Telescope.components.UsersSingle},
     {name:"users.account",  path:"account",            component:Telescope.components.UsersAccount},
@@ -43,9 +44,9 @@ Meteor.startup(() => {
 
   serverOptions.htmlHook = (html) => {
     const head = Helmet.rewind();
-    return html.replace('<head>', '<head>'+ head.title + head.meta + head.link);    
+    return html.replace('<head>', '<head>'+ head.title + head.meta + head.link);
   }
-  
+
   // ReactRouterSSR.Run(AppRoutes, {historyHook: () => history}, {historyHook: () => history});
   ReactRouterSSR.Run(AppRoutes, clientOptions, serverOptions);
 

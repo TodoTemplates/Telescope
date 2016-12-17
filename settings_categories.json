@@ -1,0 +1,56 @@
+"categories": [
+  {
+    "name": "Business",
+    "description": "All things makin chedda",
+    "order": 4,
+    "slug": "business"
+  },
+  {
+    "name": "Education",
+    "description": "Learn new skills, concepts, and fields of study.",
+    "order": 7,
+    "slug": "education"
+  },
+  {
+    "name": "Personal Development",
+    "description": "Improve awareness and identity, develop potential, enhance quality of life, and contribute to the realization of dreams and aspirations.",
+    "order": 3,
+    "slug": "personal-development"
+  },
+  {
+    "name": "Routines",
+    "description": "How to run your day, week, month, etc.",
+    "order": 4,
+    "slug": "routines"
+  },
+  {
+    "name": "Social Media",
+    "description": "Techniques and tactics for reaching people and getting your voice heard.",
+    "order": 5,
+    "slug": "education"
+  },
+  {
+    "name": "Sports & Fitness",
+    "description": "",
+    "order": 8,
+    "slug": "sports"
+  },
+  {
+    "name": "Writing",
+    "description": "How to write",
+    "order": 9,
+    "slug": "writing"
+  },
+  {
+    "name": "Cooking",
+    "description": "Food, recipes, meal plans, and yum",
+    "order": 11,
+    "slug": "cooking"
+  },
+  {
+    "name": "Maintenance",
+    "description": "For your body, cars, homes, etc.",
+    "order": 12,
+    "slug": "maintenance"
+  }
+],
