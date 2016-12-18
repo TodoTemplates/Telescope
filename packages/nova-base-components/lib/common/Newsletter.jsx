@@ -1,11 +1,10 @@
+import Telescope from 'meteor/nova:lib';
 import React, { PropTypes, Component } from 'react';
 import { FormattedMessage, intlShape } from 'react-intl';
 import Formsy from 'formsy-react';
 import { Input } from 'formsy-react-components';
-//import Actions from "../actions.js";
 import { Button } from 'react-bootstrap';
 import Cookie from 'react-cookie';
-//import { Messages } from "meteor/nova:core";
 import Users from 'meteor/nova:users';
 
 class Newsletter extends Component {
@@ -16,29 +15,21 @@ class Newsletter extends Component {
     this.successCallbackSubscription = this.successCallbackSubscription.bind(this);
     this.dismissBanner = this.dismissBanner.bind(this);
 
-    const showBanner =
-      Cookie.load('showBanner') !== "no" &&
-      !Users.getSetting(context.currentUser, 'newsletter_subscribeToNewsletter', false);
-
     this.state = {
-      showBanner: showBanner
+      showBanner: showBanner(context.currentUser)
     };
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
     if (nextContext.currentUser) {
-      const showBanner =
-        Cookie.load('showBanner') !== "no" &&
-        !Users.getSetting(nextContext.currentUser, 'newsletter_subscribeToNewsletter', false);
-
-      this.setState({showBanner});
+      this.setState({showBanner: showBanner(nextContext.currentUser)});
     }
   }
 
   subscribeEmail(data) {
     this.context.actions.call("newsletter.addEmail", data.email, (error, result) => {
       if (error) {
-        console.log(error);
+        console.log(error); // eslint-disable-line
         this.context.messages.flash(error.message, "error");
       } else {
         this.successCallbackSubscription(result);
@@ -58,6 +49,11 @@ class Newsletter extends Component {
 
     // set cookie
     Cookie.save('showBanner', "no");
+
+    // set user setting too (if logged in)
+    if (this.context.currentUser) {
+      this.context.actions.call('users.setSetting', this.context.currentUser._id, 'newsletter.showBanner', false);
+    }
   }
 
   renderButton() {
@@ -84,7 +80,6 @@ class Newsletter extends Component {
   }
 
   render() {
-
     return this.state.showBanner
       ? (
         <div className="newsletter">
@@ -102,6 +97,17 @@ Newsletter.contextTypes = {
   messages: React.PropTypes.object,
   intl: intlShape
 };
+
+function showBanner (user) {
+  return (
+    // showBanner cookie either doesn't exist or is not set to "no"
+    Cookie.load('showBanner') !== "no"
+    // and showBanner user setting either doesn't exist or is set to true
+    && Users.getSetting(user, 'newsletter.showBanner', true)
+    // and user is not subscribed to the newsletter already (setting either DNE or is not set to false)
+    && !Users.getSetting(user, 'newsletter.subscribed', false)
+  );
+}
 
 module.exports = Newsletter;
 export default Newsletter;

@@ -1,3 +1,4 @@
+import Telescope from 'meteor/nova:lib';
 import React from 'react';
 
 const renderSetting = (field, key) => {
@@ -7,7 +8,7 @@ const renderSetting = (field, key) => {
       <td>{field.type && field.type.name}</td>
       <td>{field.private ? <span className="private">private</span> : Telescope.settings.get(key)}</td>
       <td>{field.defaultValue && field.defaultValue.toString()}</td>
-      <td>{field.autoform && field.autoform.instructions}</td>
+      <td>{field.form && field.form.instructions}</td>
     </tr>
   )
 }

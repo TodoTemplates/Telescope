@@ -1,23 +1,26 @@
+import Telescope from 'meteor/nova:lib';
 import Categories from "./collection.js";
 import Users from 'meteor/nova:users';
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 const canInsert = user => Users.canDo(user, "categories.new");
+const canEdit = user => Users.canDo(user, "categories.edit.all");
 
 // category schema
 Categories.schema = new SimpleSchema({
   name: {
     type: String,
     insertableIf: canInsert,
-    editableIf: Users.canEdit,
+    editableIf: canEdit,
     publish: true
   },
   description: {
     type: String,
     optional: true,
     insertableIf: canInsert,
-    editableIf: Users.canEdit,
+    editableIf: canEdit,
     publish: true,
-    autoform: {
+    form: {
       rows: 3
     }
   },
@@ -25,30 +28,30 @@ Categories.schema = new SimpleSchema({
     type: Number,
     optional: true,
     insertableIf: canInsert,
-    editableIf: Users.canEdit,
+    editableIf: canEdit,
     publish: true
   },
   slug: {
     type: String,
     optional: true,
     insertableIf: canInsert,
-    editableIf: Users.canEdit,
+    editableIf: canEdit,
     publish: true
   },
   image: {
     type: String,
     optional: true,
     insertableIf: canInsert,
-    editableIf: Users.canEdit,
+    editableIf: canEdit,
     publish: true
   },
   parentId: {
     type: String,
     optional: true,
     insertableIf: canInsert,
-    editableIf: Users.canEdit,
+    editableIf: canEdit,
     publish: true,
-    autoform: {
+    form: {
       options: function () {
         var categories = Categories.find().map(function (category) {
           return {
@@ -75,9 +78,9 @@ Telescope.settings.collection.addField([
     fieldSchema: {
       type: String,
       optional: true,
-      autoform: {
+      form: {
         group: 'categories',
-        instructions: 'Let users filter by one or multiple categories at a time.', 
+        instructions: 'Let users filter by one or multiple categories at a time.',
         options: function () {
           return [
             {value: "single", label: "categories_behavior_one_at_a_time"},
@@ -92,7 +95,7 @@ Telescope.settings.collection.addField([
     fieldSchema: {
       type: Boolean,
       optional: true,
-      autoform: {
+      form: {
         group: 'categories',
         instructions: 'Hide empty categories in navigation'
       }

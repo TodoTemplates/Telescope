@@ -1,37 +1,13 @@
-import Posts from './collection.js';
+import Telescope from 'meteor/nova:lib';
 import Users from 'meteor/nova:users';
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import Posts from './collection.js';
 
 /**
  * @summary Posts config namespace
  * @type {Object}
  */
 Posts.config = {};
-
-/**
- * @summary Post Statuses
- */
-Posts.config.postStatuses = [
-  {
-    value: 1,
-    label: 'pending'
-  },
-  {
-    value: 2,
-    label: 'approved'
-  },
-  {
-    value: 3,
-    label: 'rejected'
-  },
-  {
-    value: 4,
-    label: 'spam'
-  },
-  {
-    value: 5,
-    label: 'deleted'
-  }
-];
 
 Posts.config.STATUS_PENDING = 1;
 Posts.config.STATUS_APPROVED = 2;
@@ -192,13 +168,13 @@ Posts.schemaJSON = {
       // only provide a default value
       // 1) this is an insert operation
       // 2) status field is not set in the document being inserted
-      var user = Meteor.users.findOne(this.userId);
+      var user = Users.findOne(this.userId);
       if (this.isInsert && !this.isSet)
         return Posts.getDefaultStatus(user);
     },
-    autoform: {
+    form: {
       noselect: true,
-      options: Posts.config.postStatuses,
+      options: Telescope.statuses,
       group: 'admin'
     },
     group: Posts.formGroups.admin
@@ -270,10 +246,10 @@ Posts.schemaJSON = {
     // editableIf: canEditAll,
     control: "select",
     publish: true,
-    autoform: {
+    form: {
       group: 'admin',
       options: function () {
-        return Meteor.users.find().map(function (user) {
+        return Users.find().map(function (user) {
           return {
             value: user._id,
             label: Users.getDisplayName(user)
@@ -283,7 +259,7 @@ Posts.schemaJSON = {
     },
     join: {
       joinAs: "user",
-      collection: () => Meteor.users
+      collection: () => Users
     }
   }
 };

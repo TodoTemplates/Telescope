@@ -1,7 +1,8 @@
+import Telescope from 'meteor/nova:lib';
 import React, { PropTypes, Component } from 'react';
-import moment from 'moment';
 import { intlShape, FormattedMessage, FormattedRelative } from 'react-intl';
-import Users from 'meteor/nova:users';
+// import moment from 'moment';
+// import Users from 'meteor/nova:users';
 
 class CommentsItem extends Component{
 
@@ -32,7 +33,7 @@ class CommentsItem extends Component{
     event.preventDefault();
     this.setState({showEdit: true});
   }
-  
+
   editCancelCallback(event) {
     event.preventDefault();
     this.setState({showEdit: false});
@@ -43,11 +44,11 @@ class CommentsItem extends Component{
   }
 
   deleteComment() {
-    
+
     const comment = this.props.comment;
     const deleteConfirmMessage = this.context.intl.formatMessage({id: "comments.delete_confirm"}, {body: Telescope.utils.trimWords(comment.body, 20)});
     const deleteSuccessMessage = this.context.intl.formatMessage({id: "comments.delete_success"}, {body: Telescope.utils.trimWords(comment.body, 20)});
-    
+
     if (window.confirm(deleteConfirmMessage)) {
       this.context.actions.call('comments.deleteById', comment._id, (error, result) => {
         this.context.messages.flash(deleteSuccessMessage, "success");
@@ -60,11 +61,16 @@ class CommentsItem extends Component{
   renderComment() {
     const htmlBody = {__html: this.props.comment.htmlBody};
 
+    const showReplyButton = !this.props.comment.isDeleted && !!this.context.currentUser;
+
     return (
       <div className="comments-item-text">
         <div dangerouslySetInnerHTML={htmlBody}></div>
-        {!this.props.comment.isDeleted ? <a className="comments-item-reply-link" onClick={this.showReply}><Telescope.components.Icon name="reply"/> <FormattedMessage id="comments.reply"/></a> : null} 
-      </div>  
+        { showReplyButton ?
+          <a className="comments-item-reply-link" onClick={this.showReply}>
+            <Telescope.components.Icon name="reply"/> <FormattedMessage id="comments.reply"/>
+          </a> : null}
+      </div>
     )
   }
 
@@ -72,12 +78,12 @@ class CommentsItem extends Component{
 
     return (
       <div className="comments-item-reply">
-        <Telescope.components.CommentsNew 
-          postId={this.props.comment.postId} 
-          parentComment={this.props.comment} 
-          successCallback={this.replySuccessCallback} 
-          cancelCallback={this.replyCancelCallback} 
-          type="reply" 
+        <Telescope.components.CommentsNew
+          postId={this.props.comment.postId}
+          parentComment={this.props.comment}
+          successCallback={this.replySuccessCallback}
+          cancelCallback={this.replyCancelCallback}
+          type="reply"
         />
       </div>
     )
@@ -86,9 +92,9 @@ class CommentsItem extends Component{
   renderEdit() {
 
     return (
-      <Telescope.components.CommentsEdit 
-        comment={this.props.comment} 
-        successCallback={this.editSuccessCallback} 
+      <Telescope.components.CommentsEdit
+        comment={this.props.comment}
+        successCallback={this.editSuccessCallback}
         cancelCallback={this.editCancelCallback}
       />
     )
@@ -104,8 +110,12 @@ class CommentsItem extends Component{
             <Telescope.components.UsersAvatar size="small" user={comment.user}/>
             <Telescope.components.UsersName user={comment.user}/>
             <div className="comments-item-date"><FormattedRelative value={comment.postedAt}/></div>
-            {Users.canEdit(this.props.currentUser, this.props.comment) ? <a className="comment-edit" onClick={this.showEdit}><FormattedMessage id="comments.edit"/></a> : null}
-            {Users.canEdit(this.props.currentUser, this.props.comment) ? <a className="comment-delete" onClick={this.deleteComment}><FormattedMessage id="comments.delete"/></a> : null}
+            <Telescope.components.CanDo action="comments.edit" document={this.props.comment}>
+              <div>
+                <a className="comment-edit" onClick={this.showEdit}><FormattedMessage id="comments.edit"/></a>
+                <a className="comment-delete" onClick={this.deleteComment}><FormattedMessage id="comments.delete"/></a>
+              </div>
+            </Telescope.components.CanDo>
           </div>
           {this.state.showEdit ? this.renderEdit() : this.renderComment()}
         </div>
@@ -118,14 +128,14 @@ class CommentsItem extends Component{
 
 CommentsItem.propTypes = {
   comment: React.PropTypes.object.isRequired, // the current comment
-  currentUser: React.PropTypes.object, // the current user
-}
+};
 
 CommentsItem.contextTypes = {
+  currentUser: React.PropTypes.object,
   actions: React.PropTypes.object,
   messages: React.PropTypes.object,
   events: React.PropTypes.object,
   intl: intlShape
-}
+};
 
 module.exports = CommentsItem;

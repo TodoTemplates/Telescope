@@ -7,8 +7,9 @@ all of the class's other methods (other render
 functions, event handlers, etc.).
 */
 
+import Telescope from 'meteor/nova:lib';
 import React, { PropTypes, Component } from 'react';
-import { FormattedMessage, intlShape } from 'react-intl';
+import { FormattedMessage /*, intlShape */ } from 'react-intl';
 
 class CustomNewsletter extends Telescope.components.Newsletter {
 

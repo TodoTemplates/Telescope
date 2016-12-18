@@ -1,3 +1,4 @@
+import Telescope from 'meteor/nova:lib';
 import NewsletterSubscribe from './components/NewsletterSubscribe.jsx';
 import Posts from "meteor/nova:posts";
 import Users from 'meteor/nova:users';
@@ -17,12 +18,22 @@ Posts.addField({
 
 Users.addField([
   {
-    fieldName: 'telescope.newsletter_subscribeToNewsletter',
+    fieldName: 'telescope.newsletter.showBanner',
     fieldSchema: {
-      label: 'Subscribe to newsletter',
       type: Boolean,
       optional: true,
       publish: true,
+      defaultValue: true,
+    }
+  },
+  {
+    fieldName: 'telescope.newsletter.subscribed',
+    fieldSchema: {
+      label: 'Subscribe to Newsletter',
+      type: Boolean,
+      optional: true,
+      publish: true,
+      defaultValue: false,
       insertableIf: canInsert,
       editableIf: canEdit,
       control: NewsletterSubscribe,
@@ -44,7 +55,7 @@ if (typeof Telescope.settings.collection !== "undefined") {
       fieldSchema: {
         type: Boolean,
         optional: true,
-        autoform: {
+        form: {
           group: 'newsletter',
           instructions: 'Enable newsletter (requires restart).'
         }
@@ -55,7 +66,7 @@ if (typeof Telescope.settings.collection !== "undefined") {
       fieldSchema: {
         type: Boolean,
         optional: true,
-        autoform: {
+        form: {
           group: 'newsletter',
           instructions: 'Enable newsletter in development too (requires restart).'
         }
@@ -67,7 +78,7 @@ if (typeof Telescope.settings.collection !== "undefined") {
         type: String,
         optional: true,
         private: true,
-        autoform: {
+        form: {
           group: "newsletter",
           class: "private-field"
         }
@@ -79,7 +90,7 @@ if (typeof Telescope.settings.collection !== "undefined") {
         type: String,
         optional: true,
         private: true,
-        autoform: {
+        form: {
           group: 'newsletter',
           instructions: 'The ID of the list you want to send to.',
           class: "private-field"
@@ -91,7 +102,7 @@ if (typeof Telescope.settings.collection !== "undefined") {
       fieldSchema: {
         type: Number,
         optional: true,
-        autoform: {
+        form: {
           group: 'newsletter'
         }
       }
@@ -102,7 +113,7 @@ if (typeof Telescope.settings.collection !== "undefined") {
         type: [Number],
         optional: true,
         defaultValue: [2,4,6],
-        autoform: {
+        form: {
           group: 'newsletter',
           instructions: 'Defaults to once a week on Monday. Changes require restarting your app to take effect.',
           noselect: true,
@@ -145,7 +156,7 @@ if (typeof Telescope.settings.collection !== "undefined") {
         type: String,
         optional: true,
         defaultValue: '00:00',
-        autoform: {
+        form: {
           group: 'newsletter',
           instructions: 'Defaults to 00:00/12:00 AM. Time to send out newsletter if enabled (GMT).',
           type: 'time'
@@ -157,7 +168,7 @@ if (typeof Telescope.settings.collection !== "undefined") {
       fieldSchema: {
         type: Boolean,
         optional: true,
-        autoform: {
+        form: {
           group: 'newsletter',
           instructions: 'Automatically subscribe new users on sign-up.'
         }

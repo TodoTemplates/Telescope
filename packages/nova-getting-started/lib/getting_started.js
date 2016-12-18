@@ -1,3 +1,4 @@
+import Telescope from 'meteor/nova:lib';
 import Posts from "meteor/nova:posts";
 import Comments from "meteor/nova:comments";
 import Users from 'meteor/nova:users';
@@ -7,7 +8,7 @@ Users.addField({
   fieldSchema: {
     type: Boolean,
     optional: true,
-    autoform: {
+    form: {
       omit: true
     }
   }
@@ -18,7 +19,7 @@ Posts.addField({
   fieldSchema: {
     type: String,
     optional: true,
-    autoform: {
+    form: {
       omit: true
     }
   }
@@ -29,7 +30,7 @@ Posts.addField({
   fieldSchema: {
     type: Boolean,
     optional: true,
-    autoform: {
+    form: {
       omit: true
     }
   }
@@ -40,7 +41,7 @@ fieldName: 'isDummy',
 fieldSchema: {
   type: Boolean,
   optional: true,
-  autoform: {
+  form: {
     omit: true
   }
 }

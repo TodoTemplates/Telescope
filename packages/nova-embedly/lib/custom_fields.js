@@ -1,3 +1,4 @@
+import Telescope from 'meteor/nova:lib';
 import PublicationUtils from 'meteor/utilities:smart-publications';
 import EmbedlyURL from './components/EmbedlyURL.jsx';
 import ThumbnailURL from './components/ThumbnailURL.jsx';
@@ -70,7 +71,7 @@ if (typeof Telescope.settings.collection !== "undefined") {
         type: String,
         optional: true,
         private: true,
-        autoform: {
+        form: {
           group: 'embedly',
           class: 'private-field'
         }
@@ -81,7 +82,7 @@ if (typeof Telescope.settings.collection !== "undefined") {
       fieldSchema: {
         type: Number,
         optional: true,
-        autoform: {
+        form: {
           group: 'embedly'
         }
       }
@@ -91,7 +92,7 @@ if (typeof Telescope.settings.collection !== "undefined") {
       fieldSchema: {
         type: Number,
         optional: true,
-        autoform: {
+        form: {
           group: 'embedly'
         }
       }

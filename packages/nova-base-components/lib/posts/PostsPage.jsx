@@ -1,3 +1,4 @@
+import Telescope from 'meteor/nova:lib';
 import React from 'react';
 import Posts from "meteor/nova:posts";
 
@@ -13,11 +14,11 @@ const PostsPage = ({document, currentUser}) => {
       
       <Telescope.components.PostsItem post={post}/>
 
-      <div className="posts-page-body" dangerouslySetInnerHTML={htmlBody}></div>
+      {post.htmlBody ? <div className="posts-page-body" dangerouslySetInnerHTML={htmlBody}></div> : null}
 
       {/*<SocialShare url={ Posts.getLink(post) } title={ post.title }/>*/}
 
-      <Telescope.components.PostsCommentsThread document={post} currentUser={currentUser}/>
+      <Telescope.components.PostsCommentsThread document={post} />
 
     </div>
   )

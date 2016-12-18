@@ -1,3 +1,4 @@
+import Telescope from 'meteor/nova:lib';
 import Posts from "meteor/nova:posts";
 import Comments from "meteor/nova:comments";
 
@@ -51,10 +52,10 @@ const serveCommentRSS = function (terms, url) {
   var feed = new RSS(getMeta(url));
 
   Comments.find({isDeleted: {$ne: true}}, {sort: {postedAt: -1}, limit: 20}).forEach(function(comment) {
-    post = Posts.findOne(comment.postId);
+    var post = Posts.findOne(comment.postId);
     feed.item({
-     title: 'Comment on '+post.title,
-     description: comment.body+'</br></br>'+'<a href="'+Telescope.utils.getPostCommentUrl(post._id, comment._id)+'">Discuss</a>',
+     title: 'Comment on ' + post.title,
+     description: `${comment.body}</br></br><a href="${comment.getPageUrl(true)}">Discuss</a>`,
      author: comment.author,
      date: comment.postedAt,
      url: comment.getPageUrl(true),

@@ -1,3 +1,4 @@
+import Telescope from 'meteor/nova:lib';
 import Users from 'meteor/nova:users';
 import NovaEmail from 'meteor/nova:email';
 
@@ -20,7 +21,7 @@ Telescope.notifications.create = (userIds, notificationName, data) => {
     if (!!userEmail) {
       NovaEmail.buildAndSendHTML(Users.getEmail(user), subject, html);
     } else {
-      console.log(`// Couldn't send notification: admin user ${user._id} doesn't have an email`);
+      console.log(`// Couldn't send notification: admin user ${user._id} doesn't have an email`); // eslint-disable-line
     }
   });
 
@@ -33,7 +34,7 @@ if (typeof Telescope.settings.collection !== "undefined") {
       type: Boolean,
       optional: true,
       defaultValue: true,
-      autoform: {
+      form: {
         group: 'notifications',
         instructions: 'Enable email notifications for new posts and new comments (requires restart).'
       }

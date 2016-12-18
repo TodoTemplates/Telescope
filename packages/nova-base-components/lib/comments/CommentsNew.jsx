@@ -18,9 +18,8 @@ class CommentsNew extends Component {
 
     return (
       <div className="comments-new-form">
-        <NovaForm 
-          collection={Comments} 
-          currentUser={this.context.currentUser}
+        <NovaForm
+          collection={Comments}
           methodName="comments.new"
           prefilledProps={prefilledProps}
           successCallback={this.props.successCallback}
@@ -31,7 +30,7 @@ class CommentsNew extends Component {
     )
   }
 
-};
+}
 
 CommentsNew.propTypes = {
   postId: React.PropTypes.string.isRequired,

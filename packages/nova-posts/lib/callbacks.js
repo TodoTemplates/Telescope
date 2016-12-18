@@ -1,3 +1,4 @@
+import Telescope from 'meteor/nova:lib';
 import Posts from './collection.js'
 import marked from 'marked';
 import Users from 'meteor/nova:users';
@@ -82,6 +83,7 @@ Posts.before.update(function (userId, doc, fieldNames, modifier) {
 
 ### posts.edit.sync
 
+- PostsEditDuplicateLinksCheck
 - PostsEditForceStickyToFalse
 
 ### posts.edit.async
@@ -182,7 +184,7 @@ Telescope.callbacks.add("posts.new.method", PostsNewSubmittedPropertiesCheck);
  */
 function PostsNewDuplicateLinksCheck (post, user) {
   if(!!post.url) {
-    Posts.checkForSameUrl(post.url, user);
+    Posts.checkForSameUrl(post.url);
   }
   return post;
 }
@@ -205,11 +207,6 @@ function PostsNewRequiredPropertiesCheck (post, user) {
   // generate slug
   post.slug = Telescope.utils.slugify(post.title);
 
-  // post is not pending and has been scheduled to be posted in the future by a moderator/admin
-  if (post.status !== Posts.config.STATUS_PENDING && post.postedAt && post.postedAt > post.createdAt) {
-    post.status = Posts.config.STATUS_SCHEDULED;
-  }
-
   // if post is approved but doesn't have a postedAt date, give it a default date
   // note: pending posts get their postedAt date only once theyre approved
   if (Posts.isApproved(post) && !post.postedAt) {
@@ -224,7 +221,7 @@ Telescope.callbacks.add("posts.new.sync", PostsNewRequiredPropertiesCheck);
  * @summary Set the post's isFuture to true if necessary
  */
 function PostsNewSetFuture (post, user) {
-  post.isFuture = post.postedAt.getTime() > post.createdAt.getTime() + 1000; // round up to the second
+  post.isFuture = post.postedAt && post.postedAt.getTime() > post.createdAt.getTime() + 1000; // round up to the second
   return post;
 }
 Telescope.callbacks.add("posts.new.sync", PostsNewSetFuture);
@@ -236,7 +233,7 @@ Telescope.callbacks.add("posts.new.sync", PostsNewSetFuture);
  */
 function PostsNewIncrementPostCount (post) {
   var userId = post.userId;
-  Meteor.users.update({_id: userId}, {$inc: {"telescope.postCount": 1}});
+  Users.update({_id: userId}, {$inc: {"telescope.postCount": 1}});
 }
 Telescope.callbacks.add("posts.new.async", PostsNewIncrementPostCount);
 
@@ -245,7 +242,7 @@ Telescope.callbacks.add("posts.new.async", PostsNewIncrementPostCount);
  */
 function PostsNewUpvoteOwnPost (post) {
   if (typeof Telescope.operateOnItem !== "undefined") {
-    var postAuthor = Meteor.users.findOne(post.userId);
+    var postAuthor = Users.findOne(post.userId);
     Telescope.operateOnItem(Posts, post._id, postAuthor, "upvote");
   }
 }
@@ -261,7 +258,7 @@ function PostsNewNotifications (post) {
     var adminIds = _.pluck(Users.adminUsers({fields: {_id:1}}), '_id');
     var notifiedUserIds = _.pluck(Users.find({'telescope.notifications_posts': true}, {fields: {_id:1}}).fetch(), '_id');
     var notificationData = {
-      post: _.pick(post, '_id', 'userId', 'title', 'url')
+      post: _.pick(post, '_id', 'userId', 'title', 'url', 'slug')
     };
 
     // remove post author ID from arrays
@@ -312,6 +309,17 @@ Telescope.callbacks.add("posts.edit.method", PostsEditSubmittedPropertiesCheck);
 // ------------------------------------- posts.edit.sync -------------------------------- //
 
 /**
+ * @summary Check for duplicate links
+ */
+const PostsEditDuplicateLinksCheck = (modifier, post) => {
+  if(post.url !== modifier.$set.url && !!modifier.$set.url) {
+    Posts.checkForSameUrl(modifier.$set.url);
+  }
+  return modifier;
+};
+Telescope.callbacks.add("posts.edit.sync", PostsEditDuplicateLinksCheck);
+
+/**
  * @summary Force sticky to default to false when it's not specified
  * (simpleSchema's defaultValue does not work on edit, so do it manually in callback)
  */
@@ -331,7 +339,7 @@ Telescope.callbacks.add("posts.edit.sync", PostsEditForceStickyToFalse);
  */
 function PostsEditSetIsFuture (modifier, post) {
   // if a post's postedAt date is in the future, set isFuture to true
-  modifier.$set.isFuture = modifier.$set.postedAt.getTime() > new Date().getTime() + 1000;
+  modifier.$set.isFuture = modifier.$set.postedAt && modifier.$set.postedAt.getTime() > new Date().getTime() + 1000;
   return modifier;
 }
 Telescope.callbacks.add("posts.edit.sync", PostsEditSetIsFuture);
@@ -352,7 +360,7 @@ Telescope.callbacks.add("posts.edit.sync", PostsEditSetPostedAt);
 // ------------------------------------- posts.edit.async -------------------------------- //
 
 function PostsEditRunPostApprovedCallbacks (post, oldPost) {
-  var now = new Date();
+  // var now = new Date();
 
   if (Posts.isApproved(post) && !Posts.isApproved(oldPost)) {
     Telescope.callbacks.runAsync("posts.approve.async", post);
@@ -379,8 +387,8 @@ Telescope.callbacks.add("posts.approve.async", PostsApprovedNotification);
 // ------------------------------------- users.remove.async -------------------------------- //
 
 function UsersRemoveDeletePosts (user, options) {
-  if (options.deletePosts) {
-    var deletedPosts = Posts.remove({userId: userId});
+  if (options && options.deletePosts) {
+    Posts.remove({userId: user._id});
   } else {
     // not sure if anything should be done in that scenario yet
     // Posts.update({userId: userId}, {$set: {author: "\[deleted\]"}}, {multi: true});

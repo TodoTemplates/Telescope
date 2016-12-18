@@ -1,5 +1,4 @@
-// methods to add and remove users from MailChimp lists
-
+import Telescope from 'meteor/nova:lib';
 import Users from 'meteor/nova:users';
 import MailChimp from './mailchimp_api.js';
 
@@ -31,7 +30,7 @@ MailChimpList.add = function(userOrEmail, confirm, done){
 
     try {
 
-      console.log('// Adding "'+email+'" to MailChimp list…');
+      console.log('// Adding "'+email+'" to MailChimp list…'); // eslint-disable-line
 
       var api = new MailChimp(apiKey);
       var subscribeOptions = {
@@ -45,10 +44,10 @@ MailChimpList.add = function(userOrEmail, confirm, done){
 
       // mark user as subscribed
       if (!!user) {
-        Users.methods.setSetting(user._id, 'newsletter_subscribeToNewsletter', true);
+        Users.methods.setSetting(user._id, 'newsletter.subscribed', true);
       }
 
-      console.log("// User subscribed");
+      console.log("// User subscribed"); // eslint-disable-line
 
       return subscribe;
 
@@ -56,7 +55,7 @@ MailChimpList.add = function(userOrEmail, confirm, done){
       throw new Meteor.Error("subscription-failed", error.message);
     }
   } else {
-    throw new Meteor.Error("Please provide your MailChimp API key and list ID", error.message);
+    throw new Meteor.Error("Please provide your MailChimp API key and list ID");
   }
 };
 
@@ -75,7 +74,7 @@ MailChimpList.remove = (user) => {
 
     try {
 
-      console.log('// Removing "'+email+'" to MailChimp list…');
+      console.log('// Removing "'+email+'" from MailChimp list…'); // eslint-disable-line
 
       var api = new MailChimp(apiKey);
       var subscribeOptions = {
@@ -88,9 +87,9 @@ MailChimpList.remove = (user) => {
       var subscribe = api.call('lists', 'unsubscribe', subscribeOptions);
 
       // mark user as unsubscribed
-      Users.methods.setSetting(user._id, 'newsletter_subscribeToNewsletter', false);
+      Users.methods.setSetting(user._id, 'newsletter.subscribed', false);
 
-      console.log("// User unsubscribed");
+      console.log("// User unsubscribed"); // eslint-disable-line
 
       return subscribe;
 
@@ -98,7 +97,7 @@ MailChimpList.remove = (user) => {
       throw new Meteor.Error("unsubscription-failed", error.message);
     }
   } else {
-    throw new Meteor.Error("Please provide your MailChimp API key and list ID", error.message);
+    throw new Meteor.Error("Please provide your MailChimp API key and list ID");
   }
 };
 

@@ -1,3 +1,4 @@
+import Telescope from 'meteor/nova:lib';
 import Posts from "meteor/nova:posts";
 import PublicationUtils from 'meteor/utilities:smart-publications';
 
@@ -20,13 +21,13 @@ Posts.addField([
 ]);
 
 if (typeof Settings !== "undefined") {
-  Settings.addField([
+  Telescope.settings.collection.addField([
     {
       fieldName: 'cloudinaryCloudName',
       fieldSchema: {
         type: String,
         optional: true,
-        autoform: {
+        form: {
           group: 'cloudinary'
         }
       }
@@ -37,7 +38,7 @@ if (typeof Settings !== "undefined") {
         type: String,
         optional: true,
         private: true,
-        autoform: {
+        form: {
           group: 'cloudinary',
           class: 'private-field'
         }
@@ -49,7 +50,7 @@ if (typeof Settings !== "undefined") {
         type: String,
         optional: true,
         private: true,
-        autoform: {
+        form: {
           group: 'cloudinary',
           class: 'private-field'
         }

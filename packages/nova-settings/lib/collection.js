@@ -1,4 +1,6 @@
+import Telescope from 'meteor/nova:lib';
 import Users from 'meteor/nova:users';
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 const isInSettingsJSON = function () {
   // settings can either be in settings json's public, or in the special object we publish only for admins for private settings
@@ -20,7 +22,7 @@ Telescope.settings.schema = new SimpleSchema({
     insertableIf: canEdit,
     editableIf: canEdit,
     publish: true,
-    autoform: {
+    form: {
       disabled: isInSettingsJSON,
       prefill: getFromJSON,
       instructions: "Your site's title.",
@@ -34,7 +36,7 @@ Telescope.settings.schema = new SimpleSchema({
     // regEx: SimpleSchema.RegEx.Url,
     insertableIf: canEdit,
     editableIf: canEdit,
-    autoform: {
+    form: {
       disabled: isInSettingsJSON,
       prefill: getFromJSON,
       group: "01_general",
@@ -48,7 +50,7 @@ Telescope.settings.schema = new SimpleSchema({
     publish: true,
     insertableIf: canEdit,
     editableIf: canEdit,
-    autoform: {
+    form: {
       disabled: isInSettingsJSON,
       prefill: getFromJSON,
       group: "01_general"
@@ -60,7 +62,7 @@ Telescope.settings.schema = new SimpleSchema({
     publish: true,
     insertableIf: canEdit,
     editableIf: canEdit,
-    autoform: {
+    form: {
       disabled: isInSettingsJSON,
       prefill: getFromJSON,
       group: "01_general",
@@ -75,7 +77,7 @@ Telescope.settings.schema = new SimpleSchema({
     insertableIf: canEdit,
     editableIf: canEdit,
     regEx: SimpleSchema.RegEx.Url,
-    autoform: {
+    form: {
       disabled: isInSettingsJSON,
       prefill: getFromJSON,
       group: "01_general",
@@ -89,7 +91,7 @@ Telescope.settings.schema = new SimpleSchema({
     insertableIf: canEdit,
     editableIf: canEdit,
     control: "checkbox",
-    autoform: {
+    form: {
       disabled: isInSettingsJSON,
       prefill: getFromJSON,
       group: 'invites',
@@ -103,7 +105,7 @@ Telescope.settings.schema = new SimpleSchema({
     insertableIf: canEdit,
     editableIf: canEdit,
     control: "checkbox",
-    autoform: {
+    form: {
       disabled: isInSettingsJSON,
       prefill: getFromJSON,
       group: 'invites',
@@ -117,7 +119,7 @@ Telescope.settings.schema = new SimpleSchema({
     insertableIf: canEdit,
     editableIf: canEdit,
     control: "checkbox",
-    autoform: {
+    form: {
       disabled: isInSettingsJSON,
       prefill: getFromJSON,
       group: "01_general",
@@ -130,7 +132,7 @@ Telescope.settings.schema = new SimpleSchema({
     optional: true,
     insertableIf: canEdit,
     editableIf: canEdit,
-    autoform: {
+    form: {
       disabled: isInSettingsJSON,
       prefill: getFromJSON,
       group: "06_email",
@@ -143,7 +145,7 @@ Telescope.settings.schema = new SimpleSchema({
     optional: true,
     insertableIf: canEdit,
     editableIf: canEdit,
-    autoform: {
+    form: {
       disabled: isInSettingsJSON,
       prefill: getFromJSON,
       group: "06_email",
@@ -157,7 +159,7 @@ Telescope.settings.schema = new SimpleSchema({
     defaultValue: 30,
     insertableIf: canEdit,
     editableIf: canEdit,
-    autoform: {
+    form: {
       disabled: isInSettingsJSON,
       prefill: getFromJSON,
       group: '01_general',
@@ -172,7 +174,7 @@ Telescope.settings.schema = new SimpleSchema({
     defaultValue: 30,
     insertableIf: canEdit,
     editableIf: canEdit,
-    autoform: {
+    form: {
       disabled: isInSettingsJSON,
       prefill: getFromJSON,
       group: "02_posts",
@@ -186,7 +188,7 @@ Telescope.settings.schema = new SimpleSchema({
     insertableIf: canEdit,
     editableIf: canEdit,
     control: "radiogroup",
-    autoform: {
+    form: {
       disabled: isInSettingsJSON,
       prefill: getFromJSON,
       group: "02_posts",
@@ -203,7 +205,7 @@ Telescope.settings.schema = new SimpleSchema({
     defaultValue: 15,
     insertableIf: canEdit,
     editableIf: canEdit,
-    autoform: {
+    form: {
       disabled: isInSettingsJSON,
       prefill: getFromJSON,
       group: "03_comments",
@@ -217,7 +219,7 @@ Telescope.settings.schema = new SimpleSchema({
     defaultValue: 30,
     insertableIf: canEdit,
     editableIf: canEdit,
-    autoform: {
+    form: {
       disabled: isInSettingsJSON,
       prefill: getFromJSON,
       group: "02_posts",
@@ -231,7 +233,7 @@ Telescope.settings.schema = new SimpleSchema({
     publish: true,
     insertableIf: canEdit,
     editableIf: canEdit,
-    autoform: {
+    form: {
       disabled: isInSettingsJSON,
       prefill: getFromJSON,
       group: 'invites'
@@ -244,7 +246,7 @@ Telescope.settings.schema = new SimpleSchema({
     publish: true,
     insertableIf: canEdit,
     editableIf: canEdit,
-    autoform: {
+    form: {
       disabled: isInSettingsJSON,
       prefill: getFromJSON,
       group: "02_posts"
@@ -256,7 +258,7 @@ Telescope.settings.schema = new SimpleSchema({
     publish: true,
     insertableIf: canEdit,
     editableIf: canEdit,
-    autoform: {
+    form: {
       disabled: isInSettingsJSON,
       prefill: getFromJSON,
       group: "04_logo"
@@ -268,7 +270,7 @@ Telescope.settings.schema = new SimpleSchema({
     publish: true,
     insertableIf: canEdit,
     editableIf: canEdit,
-    autoform: {
+    form: {
       disabled: isInSettingsJSON,
       prefill: getFromJSON,
       group: "04_logo"
@@ -280,7 +282,7 @@ Telescope.settings.schema = new SimpleSchema({
     publish: true,
     insertableIf: canEdit,
     editableIf: canEdit,
-    autoform: {
+    form: {
       disabled: isInSettingsJSON,
       prefill: getFromJSON,
       group: "04_logo"
@@ -292,7 +294,7 @@ Telescope.settings.schema = new SimpleSchema({
     publish: true,
     insertableIf: canEdit,
     editableIf: canEdit,
-    autoform: {
+    form: {
       disabled: isInSettingsJSON,
       prefill: getFromJSON,
       group: "04_logo"
@@ -304,7 +306,7 @@ Telescope.settings.schema = new SimpleSchema({
   //   optional: true,
   //   insertableIf: canEdit,
   //   editableIf: canEdit,
-  //   autoform: {
+  //   form: {
   //     group: "01_general",
   //     instructions:  'The app\'s language. Defaults to English.',
   //     options: function () {
@@ -324,7 +326,7 @@ Telescope.settings.schema = new SimpleSchema({
     publish: true,
     insertableIf: canEdit,
     editableIf: canEdit,
-    autoform: {
+    form: {
       disabled: isInSettingsJSON,
       prefill: getFromJSON,
       group: "07_integrations"
@@ -336,7 +338,7 @@ Telescope.settings.schema = new SimpleSchema({
     publish: true,
     insertableIf: canEdit,
     editableIf: canEdit,
-    autoform: {
+    form: {
       disabled: isInSettingsJSON,
       prefill: getFromJSON,
       group: "07_integrations"
@@ -348,7 +350,7 @@ Telescope.settings.schema = new SimpleSchema({
     publish: true,
     insertableIf: canEdit,
     editableIf: canEdit,
-    autoform: {
+    form: {
       disabled: isInSettingsJSON,
       prefill: getFromJSON,
       group: "07_integrations"
@@ -360,7 +362,7 @@ Telescope.settings.schema = new SimpleSchema({
     publish: true,
     insertableIf: canEdit,
     editableIf: canEdit,
-    autoform: {
+    form: {
       disabled: isInSettingsJSON,
       prefill: getFromJSON,
       group: "01_general"

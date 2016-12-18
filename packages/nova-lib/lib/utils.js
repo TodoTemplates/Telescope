@@ -1,3 +1,4 @@
+import Telescope from './config.js';
 import marked from 'marked';
 import urlObject from 'url';
 import moment from 'moment';
@@ -59,7 +60,7 @@ Telescope.utils.camelCaseify = function(str) {
  * @param {Number} numWords - Number of words to trim sentence to.
  */
 Telescope.utils.trimWords = function(s, numWords) {
-  
+
   if (!s)
     return s;
 
@@ -88,7 +89,7 @@ Telescope.utils.capitalise = function(str) {
 
 Telescope.utils.t = function(message) {
   var d = new Date();
-  console.log("### "+message+" rendered at "+d.getHours()+":"+d.getMinutes()+":"+d.getSeconds());
+  console.log("### "+message+" rendered at "+d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()); // eslint-disable-line
 };
 
 Telescope.utils.nl2br = function(str) {
@@ -130,35 +131,6 @@ Telescope.utils.getOutgoingUrl = function (url) {
   return Telescope.utils.getSiteUrl() + "out?url=" + encodeURIComponent(url);
 };
 
-// This function should only ever really be necessary server side
-// Client side using .path() is a better option since it's relative
-// and shouldn't care about the siteUrl.
-Telescope.utils.getRouteUrl = function (routeName, params, options) {
-  options = options || {};
-  var route = FlowRouter.path(
-    routeName,
-    params || {},
-    options
-  );
-  return route;
-};
-
-Telescope.utils.getSignupUrl = function() {
-  return this.getRouteUrl('signUp');
-};
-Telescope.utils.getSigninUrl = function() {
-  return this.getRouteUrl('signIn');
-};
-
-//TODO: fix this
-Telescope.utils.getPostCommentUrl = function(postId, commentId) {
-  // get link to a comment on a post page
-  return this.getRouteUrl('post_page_comment', {
-    _id: postId,
-    commentId: commentId
-  });
-};
-
 Telescope.utils.slugify = function (s) {
   var slug = getSlug(s, {
     truncate: 60
@@ -173,11 +145,14 @@ Telescope.utils.slugify = function (s) {
 };
 
 Telescope.utils.getUnusedSlug = function (collection, slug) {
-  var suffix = "";
-  var index = 0;
+  let suffix = "";
+  let index = 0;
+
+  // handle edge case for Users collection
+  const field = collection._name === 'users' ? 'telescope.slug' : 'slug';
 
   // test if slug is already in use
-  while (!!collection.findOne({slug: slug+suffix})) {
+  while (!!collection.findOne({[field]: slug+suffix})) {
     index++;
     suffix = "-"+index;
   }
@@ -264,7 +239,7 @@ Telescope.utils.checkNested = function(obj /*, level1, level2, ... levelN*/) {
 
 Telescope.log = function (s) {
   if(Telescope.settings.get('debug', false) || process.env.NODE_ENV === "development") {
-    console.log(s);
+    console.log(s); // eslint-disable-line
   }
 };
 
@@ -277,14 +252,14 @@ Telescope.getNestedProperty = function (obj, desc) {
 
 // see http://stackoverflow.com/a/14058408/649299
 _.mixin({
-  compactObject : function(o) {
-     var clone = _.clone(o);
-     _.each(clone, function(v, k) {
-       if(!v) {
-         delete clone[k];
-       }
-     });
-     return clone;
+  compactObject : function(object) {
+    var clone = _.clone(object);
+    _.each(clone, function(value, key) {
+      if(!value && typeof value !== "boolean") {
+        delete clone[key];
+      }
+    });
+    return clone;
   }
 });
 

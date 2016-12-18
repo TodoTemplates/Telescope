@@ -1,12 +1,18 @@
+import Telescope from 'meteor/nova:lib';
+import Posts from "meteor/nova:posts";
 import React, { PropTypes, Component } from 'react';
 import { FormattedMessage, FormattedRelative } from 'react-intl';
-import { Button } from 'react-bootstrap';
-import moment from 'moment';
-import { ModalTrigger } from "meteor/nova:core";
 import { Link } from 'react-router';
+<<<<<<< HEAD:packages/todotemplates-package/lib/components/CustomPostsItem.bak.jsx
 import Posts from "meteor/nova:posts";
 import Categories from "meteor/nova:categories";
 import Users from 'meteor/nova:users';
+=======
+// import { Button } from 'react-bootstrap';
+// import moment from 'moment';
+// import { ModalTrigger } from "meteor/nova:core";
+// import Categories from "meteor/nova:categories";
+>>>>>>> refs/remotes/TelescopeJS/master:packages/my-custom-package/lib/components/CustomPostsItem.jsx
 
 class CustomPostsItem extends Telescope.components.PostsItem {
 
@@ -28,7 +34,7 @@ class CustomPostsItem extends Telescope.components.PostsItem {
       <div className={postClass}>
 
         <div className="posts-item-vote">
-          <Telescope.components.Vote post={post} currentUser={this.context.currentUser}/>
+          <Telescope.components.Vote post={post} />
         </div>
 
         {post.thumbnailUrl ? <Telescope.components.PostsThumbnail post={post}/> : null}
@@ -50,23 +56,31 @@ class CustomPostsItem extends Telescope.components.PostsItem {
                 <FormattedMessage id="comments.count" values={{count: post.commentCount}}/>
               </Link>
             </div>
-            {(this.context.currentUser && this.context.currentUser.isAdmin) ?<Telescope.components.PostsStats post={post} />:null}
+            {this.context.currentUser && this.context.currentUser.isAdmin ? <Telescope.components.PostsStats post={post} /> : null}
             {this.renderActions()}
           </div>
 
         </div>
 
         {this.renderCommenters()}
+<<<<<<< HEAD:packages/todotemplates-package/lib/components/CustomPostsItem.bak.jsx
         <div className="posts-item-import">
           <Link to={Posts.getLink(post)} className="post-import" target="_blank">
             Import
           </Link>
         </div>
+=======
+
+>>>>>>> refs/remotes/TelescopeJS/master:packages/my-custom-package/lib/components/CustomPostsItem.jsx
 
       </div>
     )
   }
+<<<<<<< HEAD:packages/todotemplates-package/lib/components/CustomPostsItem.bak.jsx
 };
+=======
+}
+>>>>>>> refs/remotes/TelescopeJS/master:packages/my-custom-package/lib/components/CustomPostsItem.jsx
 
 CustomPostsItem.propTypes = {
   post: React.PropTypes.object.isRequired

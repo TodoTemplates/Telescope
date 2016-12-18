@@ -1,4 +1,4 @@
-
+import Telescope from 'meteor/nova:lib';
 
 function addThumbnailClass (postClass, post) {
   var thumbnailClass = !!post.thumbnailUrl ? "has-thumbnail" : "no-thumbnail";
@@ -10,7 +10,7 @@ Telescope.callbacks.add("postClass", addThumbnailClass);
 function checkIfPreviouslyPosted (data) {
   Meteor.call("checkForDuplicates", data.url, function (error, result) {
     if (error) {
-      Messages.flash(error.reason + '. <a href="'+FlowRouter.path("postPage", {_id: error.details})+'">'+"go_to_post"+'</a>');  
+      // Messages.flash(error.reason + '. <a href="'+FlowRouter.path("postPage", {_id: error.details})+'">'+"go_to_post"+'</a>');
     }
   });
   return data;

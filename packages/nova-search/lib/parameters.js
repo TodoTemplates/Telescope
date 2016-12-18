@@ -1,3 +1,4 @@
+import Telescope from 'meteor/nova:lib';
 import escapeStringRegexp from 'escape-string-regexp';
 
 function addSearchQueryParameter (parameters, terms) {
@@ -5,7 +6,7 @@ function addSearchQueryParameter (parameters, terms) {
     
     const query = escapeStringRegexp(terms.query);
 
-    var parameters = Telescope.utils.deepExtend(true, parameters, {
+    parameters = Telescope.utils.deepExtend(true, parameters, {
       selector: {
         $or: [
           {title: {$regex: query, $options: 'i'}},
@@ -20,4 +21,4 @@ function addSearchQueryParameter (parameters, terms) {
   }
   return parameters;
 }
-Telescope.callbacks.add("postsParameters", addSearchQueryParameter);
+Telescope.callbacks.add("posts.parameters", addSearchQueryParameter);

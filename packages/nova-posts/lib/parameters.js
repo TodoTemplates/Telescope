@@ -1,8 +1,10 @@
-import Posts from './collection.js'
+import Telescope from 'meteor/nova:lib';
+import { Injected } from 'meteor/meteorhacks:inject-initial';
 import moment from 'moment';
+import Posts from './collection.js'
 
 /**
- * @summary Parameter callbacks let you add parameters to subscriptions 
+ * @summary Parameter callbacks let you add parameters to subscriptions
  * @namespace Posts.parameters
  */
 Posts.parameters = {};
@@ -29,27 +31,27 @@ Posts.parameters.get = function (terms) {
     options: {}
   };
 
-  // iterate over postsParameters callbacks
-  parameters = Telescope.callbacks.run("postsParameters", parameters, _.clone(terms));
-  
+  // iterate over posts.parameters callbacks
+  parameters = Telescope.callbacks.run("posts.parameters", parameters, _.clone(terms));
+
   // if sort options are not provided, default to "createdAt" sort
   if (_.isEmpty(parameters.options.sort)) {
     parameters.options.sort = {sticky: -1, createdAt: -1};
   }
- 
+
   // extend sort to sort posts by _id to break ties
   // NOTE: always do this last to avoid _id sort overriding another sort
   parameters = Telescope.utils.deepExtend(true, parameters, {options: {sort: {_id: -1}}});
 
   // console.log(parameters);
-  
+
   return parameters;
 };
 
 // Parameter callbacks
 
 // View Parameter
-// Add a "view" property to terms which can be used to filter posts. 
+// Add a "view" property to terms which can be used to filter posts.
 function addViewParameter (parameters, terms) {
 
   // if view is not defined, default to "new"
@@ -61,28 +63,28 @@ function addViewParameter (parameters, terms) {
 
   return parameters;
 }
-Telescope.callbacks.add("postsParameters", addViewParameter);
+Telescope.callbacks.add("posts.parameters", addViewParameter);
 
 // View Parameter
-// Add "after" and "before" properties to terms which can be used to limit posts in time. 
+// Add "after" and "before" properties to terms which can be used to limit posts in time.
 function addTimeParameter (parameters, terms) {
 
   // console.log("// addTimeParameter")
 
   if (typeof parameters.selector.postedAt === "undefined") {
-  
+
     let postedAt = {}, mAfter, mBefore, startOfDay, endOfDay, clientTimezoneOffset, serverTimezoneOffset, timeDifference;
 
-    /* 
+    /*
 
     If we're on the client, add the time difference between client and server
-    
-    Example: client is on Japanese time (+9 hours), 
+
+    Example: client is on Japanese time (+9 hours),
     server on UCT (Greenwich) time (+0 hours), for a total difference of +9 hours.
 
     So the time "00:00, UCT" is equivalent to "09:00, JST".
 
-    So if we want to express the timestamp "00:00, UCT" on the client, 
+    So if we want to express the timestamp "00:00, UCT" on the client,
     we *add* 9 hours to "00:00, JST" on the client to get "09:00, JST" and
     sync up both times.
 
@@ -92,7 +94,7 @@ function addTimeParameter (parameters, terms) {
       clientTimezoneOffset = -1 * new Date().getTimezoneOffset();
       serverTimezoneOffset = -1 * Injected.obj('serverTimezoneOffset').offset;
       timeDifference = clientTimezoneOffset - serverTimezoneOffset;
-    
+
       // console.log("client time:"+clientTimezoneOffset);
       // console.log("server time:"+serverTimezoneOffset);
       // console.log("difference: "+timeDifference);
@@ -126,7 +128,7 @@ function addTimeParameter (parameters, terms) {
       }
 
       postedAt.$lt = endOfDay.toDate();
-    
+
     }
 
     if (!_.isEmpty(postedAt)) {
@@ -137,7 +139,7 @@ function addTimeParameter (parameters, terms) {
 
   return parameters;
 }
-Telescope.callbacks.add("postsParameters", addTimeParameter);
+Telescope.callbacks.add("posts.parameters", addTimeParameter);
 
 // limit the number of items that can be requested at once
 function limitPosts (parameters, terms) {
@@ -171,4 +173,4 @@ function limitPosts (parameters, terms) {
 
   return parameters;
 }
-Telescope.callbacks.add("postsParameters", limitPosts);
+Telescope.callbacks.add("posts.parameters", limitPosts);

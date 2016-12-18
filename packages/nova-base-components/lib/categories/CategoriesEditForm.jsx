@@ -1,10 +1,9 @@
+import Telescope from 'meteor/nova:lib';
+import NovaForm from "meteor/nova:forms";
+import Categories from "meteor/nova:categories";
 import React, { PropTypes, Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import NovaForm from "meteor/nova:forms";
-import { DocumentContainer } from "meteor/utilities:react-list-container";
-//import { Messages } from "meteor/nova:core";
-//import Actions from "../actions.js";
-import Categories from "meteor/nova:categories";
+// import { DocumentContainer } from "meteor/utilities:react-list-container";
 
 class CategoriesEditForm extends Component{
 
@@ -15,7 +14,7 @@ class CategoriesEditForm extends Component{
 
   deleteCategory() {
     const category = this.props.category;
-    if (window.confirm(`Delete category “${category.name}”?`)) { 
+    if (window.confirm(`Delete category “${category.name}”?`)) {
       this.context.actions.call("categories.deleteById", category._id, (error, result) => {
         if (error) {
           this.context.messages.flash(error.message, "error");
@@ -31,10 +30,9 @@ class CategoriesEditForm extends Component{
 
     return (
       <div className="categories-edit-form">
-        <NovaForm 
+        <NovaForm
           document={this.props.category}
           collection={Categories}
-          currentUser={this.context.currentUser}
           methodName="categories.edit"
           successCallback={(category)=>{
             this.context.messages.flash("Category edited.", "success");

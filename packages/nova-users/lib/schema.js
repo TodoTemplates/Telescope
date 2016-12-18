@@ -1,3 +1,5 @@
+import Telescope from 'meteor/nova:lib';
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import Users from './collection.js';
 
 const adminGroup = {
@@ -27,7 +29,7 @@ Telescope.schemas.votes = new SimpleSchema({
     optional: true
   },
   votedAt: {
-    type: Date, 
+    type: Date,
     optional: true
   }
 });
@@ -46,7 +48,7 @@ Telescope.schemas.userData = new SimpleSchema({
     control: "textarea",
     insertableIf: canInsert,
     editableIf: canEdit,
-    // autoform: {
+    // form: {
     //   rows: 5
     // }
   },
@@ -115,7 +117,7 @@ Telescope.schemas.userData = new SimpleSchema({
     publish: true,
     profile: true,
     optional: true,
-    // autoform: {
+    // form: {
     //   omit: true
     // },
     template: "user_profile_bio"
@@ -145,7 +147,7 @@ Telescope.schemas.userData = new SimpleSchema({
   //   optional: true,
   //   editableIf: canEdit,
   //   blackbox: true,
-  //   autoform: {
+  //   form: {
   //     omit: true
   //   }
   // },
@@ -208,7 +210,7 @@ Telescope.schemas.userData = new SimpleSchema({
     control: "checkboxgroup",
     insertableIf: canEditAll,
     editableIf: canEditAll,
-    autoform: {
+    form: {
       options: function () {
         const groups = _.without(_.keys(Users.groups), "anonymous", "default", "admins");
         return groups.map(group => {return {value: group, label: group};});
@@ -221,7 +223,7 @@ Telescope.schemas.userData = new SimpleSchema({
  * @summary Users schema
  * @type {SimpleSchema}
  */
-Users.schema = new SimpleSchema({ 
+Users.schema = new SimpleSchema({
   _id: {
     type: String,
     publish: true,
@@ -259,7 +261,7 @@ Users.schema = new SimpleSchema({
     insertableIf: canEditAll,
     editableIf: canEditAll,
     group: adminGroup
-    // autoform: {
+    // form: {
     //   omit: true
     // }
   },
@@ -284,6 +286,6 @@ Users.schema = new SimpleSchema({
 // });
 
 /**
- * @summary Attach schema to Meteor.users collection
+ * @summary Attach schema to Users (Meteor.users at the moment) collection
  */
 Users.attachSchema(Users.schema);

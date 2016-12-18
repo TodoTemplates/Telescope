@@ -1,3 +1,5 @@
+import Telescope from 'meteor/nova:lib';
+
 Telescope.strings.en = {
   "forms.submit": "Submit",
   "forms.cancel": "Cancel",
@@ -16,6 +18,9 @@ Telescope.strings.en = {
   "posts.status": "Status",
   "posts.sticky": "Sticky",
   "posts.load_more": "Load More",
+  "posts.load_more_days": "Load More Days",
+  "posts.no_more": "No more posts.",
+  "posts.no_results": "No posts to display.",
   "posts.search": "Search",
   "posts.view": "View",
   "posts.top": "Top",
@@ -31,6 +36,12 @@ Telescope.strings.en = {
   "posts.rate_limit_error": "Please wait {details} seconds before posting again.",
   "posts.postedAt": "Posted at",
   "posts.dateNotDefined": "Date not defined",
+  "posts.subscribe": "Subscribe",
+  "posts.unsubscribe": "Unsubscribe",
+  "posts.subscribed": "You have subscribed to “{name}” comments.",
+  "posts.unsubscribed": "You have unsubscribed from “{name}” comments.",
+  "posts.subscribed_posts" : "Posts subscribed to",
+  "posts.link_already_posted": "This link has already been posted.",
 
   "comments.comments": "Comments",
   "comments.count": "{count, plural, =0 {No comments} one {# comment} other {# comments}}",
@@ -59,15 +70,21 @@ Telescope.strings.en = {
   "users.telescope.twitterUsername": "Twitter Username",
   "users.telescope.website": "Website",
   "users.telescope.groups": "Groups",
+  "users.telescope.avatar": "Avatar",
   "users.notifications": "Notifications",
   "users.telescope.notifications_users": "New Users Notifications",
   "users.telescope.notifications_posts": "New Posts Notifications",
-  "users.telescope.newsletter_subscribeToNewsletter": "Subscribe to newsletter",
+  "users.telescope.newsletter.subscribed": "Subscribe to newsletter",
   "users.admin": "Admin",
   "users.isAdmin": "Admin",
   "users.posts": "Posts",
   "users.please_log_in": "Please log in",
   "users.cannot_post": "Sorry, you do not have permissions to post at this time",
+  "users.subscribe": "Subscribe to this user's posts",
+  "users.unsubscribe": "Unsubscribe to this user's posts",
+  "users.subscribed": "You have subscribed to “{name}” posts.",
+  "users.unsubscribed": "You have unsubscribed from “{name}” posts.",
+  "users.subscribers": "Subscribers",
 
   "categories": "Categories",
   "categories.all": "All Categories",
@@ -80,6 +97,11 @@ Telescope.strings.en = {
   "categories.slug": "Slug",
   "categories.image": "Image",
   "categories.parentId": "Parent ID",
+  "categories.subscribe": "Subscribe to this category's posts",
+  "categories.unsubscribe": "Unsubscribe to this category's posts",
+  "categories.subscribed": "You have subscribed to “{name}” posts.",
+  "categories.unsubscribed": "You have unsubscribed from “{name}” posts.",
+  "categories.subscribed_categories" : "Categories subscribed to",
 
   "settings": "Settings",
   "settings.json_message": "Note: settings already provided in your <code>settings.json</code> file will be disabled.",
@@ -116,6 +138,7 @@ Telescope.strings.en = {
   "app.404": "Sorry, we couldn't find what you were looking for.",
   "app.powered_by": "Powered by Telescope",
   "app.or": "Or",
+  "app.noPermission": "Sorry, you do not have the permission to do this at this time.",
 
   "newsletter": "Newsletter",
   "newsletter.subscribe": "Subscribe",
@@ -123,7 +146,8 @@ Telescope.strings.en = {
   "newsletter.subscribe_prompt": "Subscribe to the newsletter",
   "newsletter.email": "Your email",
   "newsletter.success_message": "Thanks for subscribing!",
+  "newsletter.subscription_updated": "Newsletter subscription updated.",
 
   "admin": "Admin",
   "notifications": "Notifications",
-}
+};

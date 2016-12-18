@@ -1,16 +1,17 @@
+import Telescope from 'meteor/nova:lib';
 import NovaEmail from 'meteor/nova:email';
 import Users from 'meteor/nova:users';
 
 Meteor.methods({
   "email.test": function (emailName) {
-    
+
     const email = NovaEmail.emails[emailName];
-    
+
     if(Users.isAdminById(this.userId)){
 
-      console.log("// testing email ["+emailName+"]");
+      console.log("// testing email ["+emailName+"]"); // eslint-disable-line
       let html, properties;
-    
+
       // if email has a custom way of generating its HTML, use it
       if (typeof email.getTestHTML !== "undefined") {
 
@@ -32,9 +33,9 @@ Meteor.methods({
       const subject = "[Test] " + email.subject.bind(email)(properties);
 
       NovaEmail.send (Telescope.settings.get('defaultEmail'), subject, html)
- 
+
       return subject;
-    
+
     } else {
       throw new Meteor.Error("must_be_admin", "You must be an admin to send test emails");
     }

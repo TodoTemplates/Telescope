@@ -1,3 +1,4 @@
+import Telescope from 'meteor/nova:lib';
 import marked from 'marked';
 import Posts from "meteor/nova:posts";
 import Comments from './collection.js';
@@ -79,8 +80,8 @@ Telescope.callbacks.add("comments.new.method", CommentsNewUserCheck);
 
 function CommentsNewRateLimit (comment, user) {
   if (!Users.isAdmin(user)) {
-    var timeSinceLastComment = Users.timeSinceLast(user, Comments),
-        commentInterval = Math.abs(parseInt(Telescope.settings.get('commentInterval',15)));
+    const timeSinceLastComment = Users.timeSinceLast(user, Comments);
+    const commentInterval = Math.abs(parseInt(Telescope.settings.get('commentInterval',15)));
     // check that user waits more than 15 seconds between comments
     if((timeSinceLastComment < commentInterval)) {
       throw new Meteor.Error("CommentsNewRateLimit", "comments.rate_limit_error", commentInterval-timeSinceLastComment);
@@ -124,7 +125,7 @@ Telescope.callbacks.add("comments.new.method", CommentsNewSubmittedPropertiesChe
  * @summary Check for required properties
  */
 function CommentsNewRequiredPropertiesCheck (comment, user) {
-  
+
   var userId = comment.userId; // at this stage, a userId is expected
 
   // Don't allow empty comments
@@ -155,7 +156,7 @@ function CommentsNewOperations (comment) {
   var userId = comment.userId;
 
   // increment comment count
-  Meteor.users.update({_id: userId}, {
+  Users.update({_id: userId}, {
     $inc:       {'telescope.commentCount': 1}
   });
 
@@ -174,7 +175,7 @@ function CommentsNewUpvoteOwnComment (comment) {
 
   if (typeof Telescope.operateOnItem !== "undefined") {
 
-    var commentAuthor = Meteor.users.findOne(comment.userId);
+    var commentAuthor = Users.findOne(comment.userId);
 
     // upvote comment
     Telescope.operateOnItem(Comments, comment._id, commentAuthor, "upvote");
@@ -232,19 +233,6 @@ function CommentsNewNotifications (comment) {
 
       }
 
-      // 3. Notify users subscribed to the thread
-      // TODO: ideally this would be injected from the telescope-subscribe-to-posts package
-      if (!!post.subscribers) {
-
-        // remove userIds of users that have already been notified
-        // and of comment author (they could be replying in a thread they're subscribed to)
-        var subscriberIdsToNotify = _.difference(post.subscribers, userIdsNotified, [comment.userId]);
-        Telescope.notifications.create(subscriberIdsToNotify, 'newCommentSubscribed', notificationData);
-
-        userIdsNotified = userIdsNotified.concat(subscriberIdsToNotify);
-
-      }
-
     }
   }
 }
@@ -289,8 +277,8 @@ Telescope.callbacks.add("comments.edit.method", CommentsEditSubmittedPropertiesC
 // ------------------------------------- users.remove.async -------------------------------- //
 
 function UsersRemoveDeleteComments (user, options) {
-  if (options.deleteComments) {
-    var deletedComments = Comments.remove({userId: userId});
+  if (options && options.deleteComments) {
+    Comments.remove({userId: user._id});
   } else {
     // not sure if anything should be done in that scenario yet
     // Comments.update({userId: userId}, {$set: {author: "\[deleted\]"}}, {multi: true});

@@ -1,11 +1,12 @@
-import React, { PropTypes, Component } from 'react';
-import { FormattedMessage, intlShape } from 'react-intl';
+import Telescope from 'meteor/nova:lib';
 import NovaForm from "meteor/nova:forms";
 import { DocumentContainer } from "meteor/utilities:react-list-container";
-//import { Messages } from "meteor/nova:core";
-//import Actions from "../actions.js";
 import Posts from "meteor/nova:posts";
-import Users from 'meteor/nova:users';
+import React, { PropTypes, Component } from 'react';
+import { FormattedMessage, intlShape } from 'react-intl';
+// import { Messages } from "meteor/nova:core";
+// import Actions from "../actions.js";
+// import Users from 'meteor/nova:users';
 
 class PostsEditForm extends Component{
 
@@ -19,7 +20,7 @@ class PostsEditForm extends Component{
     const deletePostConfirm = this.context.intl.formatMessage({id: "posts.delete_confirm"}, {title: post.title});
     const deletePostSuccess = this.context.intl.formatMessage({id: "posts.delete_success"}, {title: post.title});
 
-    if (window.confirm(deletePostConfirm)) { 
+    if (window.confirm(deletePostConfirm)) {
       this.context.actions.call('posts.remove', post._id, (error, result) => {
         this.context.messages.flash(deletePostSuccess, "success");
         this.context.events.track("post deleted", {'_id': post._id});
@@ -29,22 +30,24 @@ class PostsEditForm extends Component{
 
   renderAdminArea() {
     return (
-      <div className="posts-edit-form-admin">
-        <div className="posts-edit-form-id">ID: {this.props.post._id}</div>
-        <Telescope.components.PostsStats post={this.props.post} />
-      </div>
+      <Telescope.components.CanDo action="posts.edit.all">
+        <div className="posts-edit-form-admin">
+          <div className="posts-edit-form-id">ID: {this.props.post._id}</div>
+          <Telescope.components.PostsStats post={this.props.post} />
+        </div>
+      </Telescope.components.CanDo>
     )
   }
 
   render() {
 
-  
+
     return (
       <div className="posts-edit-form">
-        {Users.canDo(this.context.currentUser, "posts.edit.all") ?  this.renderAdminArea() : null}
-        <DocumentContainer 
-          collection={Posts} 
-          publication="posts.single" 
+        {this.renderAdminArea()}
+        <DocumentContainer
+          collection={Posts}
+          publication="posts.single"
           selector={{_id: this.props.post._id}}
           terms={{_id: this.props.post._id}}
           joins={Posts.getJoins()}
@@ -54,7 +57,7 @@ class PostsEditForm extends Component{
             collection: Posts,
             currentUser: this.context.currentUser,
             methodName: "posts.edit",
-            successCallback: (post) => { 
+            successCallback: (post) => {
               this.context.messages.flash(this.context.intl.formatMessage({id: "posts.edit_success"}, {title: post.title}), 'success')
             }
           }}

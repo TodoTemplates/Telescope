@@ -1,3 +1,4 @@
+import Telescope from 'meteor/nova:lib';
 import NovaEmail from '../namespace.js';
 import Juice from 'juice';
 import htmlToText from 'html-to-text';
@@ -71,15 +72,15 @@ NovaEmail.send = function(to, subject, html, text){
 
   if (typeof text === 'undefined'){
     // Auto-generate text version if it doesn't exist. Has bugs, but should be good enough.
-    var text = htmlToText.fromString(html, {
+    text = htmlToText.fromString(html, {
         wordwrap: 130
     });
   }
 
-  console.log('//////// sending email…');
-  console.log('from: '+from);
-  console.log('to: '+to);
-  console.log('subject: '+subject);
+  console.log('//////// sending email…'); // eslint-disable-line
+  console.log('from: '+from); // eslint-disable-line
+  console.log('to: '+to); // eslint-disable-line
+  console.log('subject: '+subject); // eslint-disable-line
   // console.log('html: '+html);
   // console.log('text: '+text);
 
@@ -91,9 +92,15 @@ NovaEmail.send = function(to, subject, html, text){
     html: html
   };
 
-  Email.send(email);
+  try {
+    Email.send(email);
+  } catch (error) {
+    console.log("// error while sending email:"); // eslint-disable-line
+    console.log(error); // eslint-disable-line
+  }
 
   return email;
+
 };
 
 NovaEmail.buildAndSend = function (to, subject, template, properties) {

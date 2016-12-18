@@ -1,3 +1,4 @@
+import Telescope from 'meteor/nova:lib';
 import Users from 'meteor/nova:users';
 
 Telescope.settings.collection.smartMethods({
@@ -15,7 +16,7 @@ Meteor.methods({
   "settings.exportToJSON": function () {
     if (Users.isAdminById(this.userId)) {
       let settings = Telescope.settings.collection.findOne();
-      const schema = Telescope.settings.collection.simpleSchema()._schema;
+      // const schema = Telescope.settings.collection.simpleSchema()._schema;
       const publicFields = Telescope.settings.collection.getPublicFields();
       delete settings._id;
       settings.public = {};
@@ -25,7 +26,7 @@ Meteor.methods({
           delete settings[key];
         }
       });
-      console.log(JSON.stringify(settings, null, 2));
+      console.log(JSON.stringify(settings, null, 2)); // eslint-disable-line
       return settings;
     }
   },

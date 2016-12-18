@@ -1,10 +1,12 @@
+import Telescope from 'meteor/nova:lib';
+
 var kadiraAppIdProperty = {
   fieldName: "kadiraAppId",
   propertyGroup: "kadira",
   fieldSchema: {
     type: String,
     optional: true,
-    autoform: {
+    form: {
       group: "kadira"
     }
   }
@@ -18,7 +20,7 @@ var kadiraAppSecretProperty = {
     type: String,
     optional: true,
     private: true,
-    autoform: {
+    form: {
       group: "kadira",
       class: "private-field"
     }

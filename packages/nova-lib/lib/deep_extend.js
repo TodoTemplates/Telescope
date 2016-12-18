@@ -1,3 +1,5 @@
+import Telescope from './config.js';
+
 // see: http://stackoverflow.com/questions/9399365/deep-extend-like-jquerys-for-nodejs
 Telescope.utils.deepExtend = function () {
   var options, name, src, copy, copyIsArray, clone, target = arguments[0] || {},
@@ -45,7 +47,6 @@ Telescope.utils.deepExtend = function () {
             return false;
           }
           var key;
-          for (key in obj) {}
           return key === undefined || hasOwn.call(obj, key);
         }
       };

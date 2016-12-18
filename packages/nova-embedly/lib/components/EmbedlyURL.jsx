@@ -1,3 +1,4 @@
+import Telescope from 'meteor/nova:lib';
 import React, { PropTypes, Component } from 'react';
 import FRC from 'formsy-react-components';
 const Input = FRC.Input;
@@ -23,16 +24,16 @@ class EmbedlyURL extends Component {
 
       // the URL has changed, get a new thumbnail
       this.context.actions.call("getEmbedlyData", url, (error, result) => {
-        
-        console.log("querying Embedly…");
-        
+
+        console.log("querying Embedly…"); // eslint-disable-line
+
         this.setState({loading: false});
 
         if (error) {
-          console.log(error)
+          console.log(error); // eslint-disable-line
           this.context.throwError({content: error.message, type: "error"});
         } else {
-          console.log(result)
+          console.log(result); // eslint-disable-line
           this.context.addToAutofilledValues({
             title: result.title,
             body: result.description,
@@ -45,7 +46,7 @@ class EmbedlyURL extends Component {
   }
 
   render() {
-    
+
     const Loading = Telescope.components.Loading;
 
     const wrapperStyle = {
@@ -61,12 +62,15 @@ class EmbedlyURL extends Component {
 
     loadingStyle.display = this.state.loading ? "block" : "none";
 
+    // see https://facebook.github.io/react/warnings/unknown-prop.html
+    const {document, updateCurrentValue, control, ...rest} = this.props; // eslint-disable-line
+
     return (
       <div className="embedly-url-field" style={wrapperStyle}>
-        <Input 
-          {...this.props}
-          onBlur={this.handleBlur} 
-          type="text"  
+        <Input
+          {...rest}
+          onBlur={this.handleBlur}
+          type="text"
           ref={ref => this.input = ref}
         />
         <div className="embedly-url-field-loading" style={loadingStyle}>

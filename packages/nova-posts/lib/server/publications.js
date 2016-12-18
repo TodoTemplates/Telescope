@@ -1,6 +1,8 @@
-import Posts from '../collection.js';
+import Telescope from 'meteor/nova:lib';
 // import Comments from "meteor/nova:comments";
 import Users from 'meteor/nova:users';
+import { Counts } from 'meteor/tmeasday:publish-counts';
+import Posts from '../collection.js';
 
 Posts._ensureIndex({"status": 1, "postedAt": 1});
 
@@ -23,8 +25,8 @@ const getPostsListUsers = posts => {
 
   userIds = _.unique(userIds);
 
-  return Meteor.users.find({_id: {$in: userIds}}, {fields: Users.publishedFields.list});
- 
+  return Users.find({_id: {$in: userIds}}, {fields: Users.publishedFields.list});
+
 };
 
 /**
@@ -36,12 +38,12 @@ const getSinglePostUsers = post => {
 
   let users = [post.userId]; // publish post author's ID
 
-  /* 
-  NOTE: to avoid circular dependencies between nova:posts and nova:comments, 
+  /*
+  NOTE: to avoid circular dependencies between nova:posts and nova:comments,
   use callback hook to get comment authors
   */
   users = Telescope.callbacks.run("posts.single.getUsers", users, post);
-  
+
   // add upvoters
   if (post.upvoters && post.upvoters.length) {
     users = users.concat(post.upvoters);
@@ -55,7 +57,7 @@ const getSinglePostUsers = post => {
   // remove any duplicate IDs
   users = _.unique(users);
 
-  return Meteor.users.find({_id: {$in: users}}, {fields: Users.publishedFields.list});
+  return Users.find({_id: {$in: users}}, {fields: Users.publishedFields.list});
 };
 
 // ------------------------------------- Publications -------------------------------- //
@@ -66,15 +68,15 @@ const getSinglePostUsers = post => {
  */
 Meteor.publish('posts.list', function (terms) {
 
-  // this.unblock(); // causes bug where publication returns 0 results  
+  // this.unblock(); // causes bug where publication returns 0 results
 
   this.autorun(function () {
-    
-    const currentUser = this.userId && Meteor.users.findOne(this.userId);
+
+    const currentUser = this.userId && Users.findOne(this.userId);
 
     terms.currentUserId = this.userId; // add currentUserId to terms
     const {selector, options} = Posts.parameters.get(terms);
-    
+
     Counts.publish(this, terms.listId, Posts.find(selector, options), {noReady: true});
 
     options.fields = Posts.publishedFields.list;
@@ -89,7 +91,7 @@ Meteor.publish('posts.list', function (terms) {
     });
 
     return Users.canDo(currentUser, "posts.view.approved.all") ? [posts, users] : [];
-  
+
   });
 
 });
@@ -102,7 +104,7 @@ Meteor.publish('posts.single', function (terms) {
 
   check(terms, Match.OneOf({_id: String}, {_id: String, slug: Match.Any}));
 
-  const currentUser = this.userId && Meteor.users.findOne(this.userId);
+  const currentUser = this.userId && Users.findOne(this.userId);
   const options = {fields: Posts.publishedFields.single};
   const posts = Posts.find(terms._id, options);
   const post = posts.fetch()[0];
@@ -111,7 +113,7 @@ Meteor.publish('posts.single', function (terms) {
     const users = getSinglePostUsers(post);
     return Users.canView(currentUser, post) ? [posts, users] : [];
   } else {
-    console.log(`// posts.single: no post found for _id “${terms._id}”`)
+    console.log(`// posts.single: no post found for _id “${terms._id}”`); // eslint-disable-line
     return [];
   }
 
