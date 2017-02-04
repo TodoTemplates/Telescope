@@ -1,52 +1,80 @@
+import { Components, registerComponent } from 'meteor/nova:core';
+import { withMutation } from 'meteor/nova:core';
 import React, { PropTypes, Component } from 'react';
 import FRC from 'formsy-react-components';
+
 const Input = FRC.Input;
 
 class EmbedlyURL extends Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.handleBlur = this.handleBlur.bind(this);
+    
     this.state = {
-      loading: false
+      loading: false,
+      value: props.value || '',
+    };
+  }
+  
+  // clean the media property of the document if it exists: this field is handled server-side in an async callback
+  async componentDidMount() {
+    try {
+      if (this.props.document && !_.isEmpty(this.props.document.media)) {
+        await this.context.updateCurrentValues({media: {}});
+      }
+    } catch(error) {
+      console.error('Error cleaning "media" property', error); // eslint-disable-line
     }
   }
 
   // called whenever the URL input field loses focus
-  handleBlur() {
-
-    this.setState({loading: true});
-
-    const url = this.input.getValue();
-
-    if (url.length) {
-
-      // the URL has changed, get a new thumbnail
-      this.context.actions.call("getEmbedlyData", url, (error, result) => {
+  async handleBlur() {
+    try {
+      // value from formsy input ref
+      const url = this.input.getValue();
+      
+      // start the mutation only if the input has a value
+      if (url.length) {
         
-        console.log("querying Embedly…");
+        // notify the user that something happens
+        await this.setState({loading: true});
+
+        // the URL has changed, get new title, body, thumbnail & media for this url
+        const result = await this.props.getEmbedlyData({url});
         
-        this.setState({loading: false});
-
-        if (error) {
-          console.log(error)
-          this.context.throwError({content: error.message, type: "error"});
-        } else {
-          console.log(result)
-          this.context.addToAutofilledValues({
-            title: result.title,
-            body: result.description,
-            thumbnailUrl: result.thumbnailUrl
-          });
-        }
-      });
-
+        // uncomment for debug
+        // console.log('Embedly Data', result);
+        
+        // extract the relevant data, for easier consumption
+        const { data: { getEmbedlyData: { title, description, thumbnailUrl } } } = result;
+        
+        // update the form
+        await this.context.updateCurrentValues({
+          title: title || "",
+          body: description || "",
+          thumbnailUrl: thumbnailUrl || "",
+        });
+        
+        // embedly component is done
+        await this.setState({loading: false});
+        
+        // remove errors & keep the current values 
+        await this.context.clearForm({clearErrors: true}); 
+      }
+    } catch(error) {
+      
+      console.error(error); // eslint-disable-line
+      
+      // embedly component is done
+      await this.setState({loading: false});
+      
+      // something bad happened
+      await this.context.throwError(error.message);
     }
   }
 
   render() {
-    
-    const Loading = Telescope.components.Loading;
 
     const wrapperStyle = {
       position: "relative"
@@ -61,16 +89,19 @@ class EmbedlyURL extends Component {
 
     loadingStyle.display = this.state.loading ? "block" : "none";
 
+    // see https://facebook.github.io/react/warnings/unknown-prop.html
+    const {document, control, getEmbedlyData, ...rest} = this.props; // eslint-disable-line
+
     return (
       <div className="embedly-url-field" style={wrapperStyle}>
-        <Input 
-          {...this.props}
-          onBlur={this.handleBlur} 
-          type="text"  
+        <Input
+          {...rest}
+          onBlur={this.handleBlur}
+          type="text"
           ref={ref => this.input = ref}
         />
         <div className="embedly-url-field-loading" style={loadingStyle}>
-          <Loading />
+          <Components.Loading />
         </div>
       </div>
     );
@@ -78,15 +109,18 @@ class EmbedlyURL extends Component {
 }
 
 EmbedlyURL.propTypes = {
-  name: React.PropTypes.string,
-  value: React.PropTypes.any,
-  label: React.PropTypes.string
+  name: PropTypes.string,
+  value: PropTypes.any,
+  label: PropTypes.string
 }
 
 EmbedlyURL.contextTypes = {
-  addToAutofilledValues: React.PropTypes.func,
-  throwError: React.PropTypes.func,
-  actions: React.PropTypes.object,
+  updateCurrentValues: PropTypes.func,
+  throwError: PropTypes.func,
+  clearForm: PropTypes.func,
 }
 
-export default EmbedlyURL;
+export default withMutation({
+  name: 'getEmbedlyData',
+  args: {url: 'String'},
+})(EmbedlyURL);

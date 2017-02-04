@@ -1,94 +1,143 @@
 import Users from 'meteor/nova:users';
+import { hasUpvoted, hasDownvoted } from './helpers.js';
+import { runCallbacks, runCallbacksAsync } from 'meteor/nova:core';
+import update from 'immutability-helper';
 
 // The equation to determine voting power. Defaults to returning 1 for everybody
-Telescope.getVotePower = function (user) {
+export const getVotePower = function (user) {
   return 1;
 };
 
-Telescope.operateOnItem = function (collection, itemId, user, operation) {
+const keepVoteProperties = item => _.pick(item, '__typename', '_id', 'upvoters', 'downvoters', 'upvotes', 'downvotes', 'baseScore');
+
+/*
+
+Runs all the operation and returns an objects without affecting the db.
+
+*/
+export const operateOnItem = function (collection, originalItem, user, operation, isClient = false) {
 
   user = typeof user === "undefined" ? Meteor.user() : user;
 
-  var item = collection.findOne(itemId);
-  var votePower = Telescope.getVotePower(user);
-  var hasUpvotedItem = user.hasUpvoted(item);
-  var hasDownvotedItem = user.hasDownvoted(item);
-  var update = {};
+  let item = {
+    upvotes: 0,
+    downvotes: 0,
+    upvoters: [],
+    downvoters: [],
+    baseScore: 0,
+    ...originalItem,
+  }; // we do not want to affect the original item directly
 
-  // console.log(collection)
-  // console.log(item)
-  // console.log(user)
-  // console.log(operation)
+  const votePower = getVotePower(user);
+  const hasUpvotedItem = hasUpvoted(user, item);
+  const hasDownvotedItem = hasDownvoted(user, item);
+  const collectionName = collection._name;
+  const canDo = Users.canDo(user, `${collectionName}.${operation}`);
+
+  // console.log('// operateOnItem')
+  // console.log('isClient: ', isClient)
+  // console.log('collection: ', collectionName)
+  // console.log('operation: ', operation)
+  // console.log('item: ', item)
+  // console.log('user: ', user)
+  // console.log('hasUpvotedItem: ', hasUpvotedItem)
+  // console.log('hasDownvotedItem: ', hasDownvotedItem)
+  // console.log('canDo: ', canDo)
 
   // make sure item and user are defined, and user can perform the operation
   if (
     !item ||
     !user || 
-    !Users.canDo(user, `${item.getCollectionName()}.${operation}`) || 
+    !canDo || 
     operation === "upvote" && hasUpvotedItem ||
-    operation === "downvote" && hasDownvotedItem
+    operation === "downvote" && hasDownvotedItem ||
+    operation === "cancelUpvote" && !hasUpvotedItem ||
+    operation === "cancelDownvote" && !hasDownvotedItem
   ) {
-    return false; 
+    throw new Error(`Cannot perform operation "${collectionName}.${operation}"`);
   }
 
   // ------------------------------ Sync Callbacks ------------------------------ //
-  item = Telescope.callbacks.run(operation, item, user);
+  
+  item = runCallbacks(operation, item, user, operation, isClient);
+
+  /*
+
+  voters arrays have different structures on client and server:
+  
+  - client: [{__typename: "User", _id: 'foo123'}]
+  - server: ['foo123']
+  
+  */
+
+  const voter = isClient ? {__typename: "User", _id: user._id} : user._id;
+  const filterFunction = isClient ? u => u._id !== user._id : u => u !== user._id;
 
   switch (operation) {
 
     case "upvote":
-
       if (hasDownvotedItem) {
-        Telescope.operateOnItem(collection, itemId, user, "cancelDownvote");
+        operateOnItem(collection, item, user, "cancelDownvote", isClient);
       }
-      update = {
-        $addToSet: {upvoters: user._id},
-        $inc: {upvotes: 1, baseScore: votePower}
-      }
+
+      item = update(item, {
+        upvoters: {$push: [voter]},
+        upvotes: {$set: item.upvotes + 1},
+        baseScore: {$set: item.baseScore + votePower},
+      });
+      
       break;
 
     case "downvote":
-
       if (hasUpvotedItem) {
-        Telescope.operateOnItem(collection, itemId, user, "cancelUpvote");
+        operateOnItem(collection, item, user, "cancelUpvote", isClient);
       }
-      update = {
-        $addToSet: {downvoters: user._id},
-        $inc: {downvotes: 1, baseScore: -votePower}
-      }
+
+      item = update(item, {
+        downvoters: {$push: [voter]},
+        downvotes: {$set: item.downvotes + 1},
+        baseScore: {$set: item.baseScore - votePower},
+      });
+      
       break;
 
     case "cancelUpvote":
-
-      update = {
-        $pull: {upvoters: user._id},
-        $inc: {upvotes: -1, baseScore: -votePower}
-      };
+      item = update(item, {
+        upvoters: {$set: item.upvoters.filter(filterFunction)},
+        upvotes: {$set: item.upvotes - 1},
+        baseScore: {$set: item.baseScore - votePower},
+      });
       break;
 
     case "cancelDownvote":
 
-      update = {
-        $pull: {downvoters: user._id},
-        $inc: {downvotes: -1, baseScore: votePower}
-      };
+      item = update(item, {
+        downvoters: {$set: item.downvoters.filter(filterFunction)},
+        downvotes: {$set: item.upvotes - 1},
+        baseScore: {$set: item.baseScore + votePower},
+      });
+      
       break;
   }
 
-  update["$set"] = {inactive: false};
-  var result = collection.update({_id: item._id}, update);
+  // console.log('new item', item);
 
-
-  if (result > 0) {
-
-    // extend item with baseScore to help calculate newScore
-    item = _.extend(item, {baseScore: (item.baseScore + votePower)});
-    
-    // --------------------- Server-Side Async Callbacks --------------------- //
-    Telescope.callbacks.runAsync(operation+".async", item, user, collection, operation);
-    
-    return true;
-
-  }
-
+  return item;
 };
+
+/*
+
+Call operateOnItem, update the db with the result, run callbacks.
+
+*/
+export const mutateItem = function (collection, originalItem, user, operation) {
+  const newItem = operateOnItem(collection, originalItem, user, operation, false);
+  newItem.inactive = false;
+
+  collection.update({_id: newItem._id}, newItem, {bypassCollection2:true});
+
+  // --------------------- Server-Side Async Callbacks --------------------- //
+  runCallbacksAsync(operation+".async", newItem, user, collection, operation); 
+  
+  return newItem;
+}

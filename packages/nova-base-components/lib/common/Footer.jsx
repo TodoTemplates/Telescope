@@ -1,3 +1,4 @@
+import { registerComponent } from 'meteor/nova:core';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -9,4 +10,4 @@ const Footer = props => {
 
 Footer.displayName = "Footer";
 
-module.exports = Footer;
+registerComponent('Footer', Footer);

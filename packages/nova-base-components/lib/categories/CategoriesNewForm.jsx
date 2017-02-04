@@ -1,18 +1,18 @@
 import React, { PropTypes, Component } from 'react';
-//import { Messages } from "meteor/nova:core";
+import { intlShape } from 'react-intl';
+import { Components, registerComponent, getFragment, withMessages } from 'meteor/nova:core';
 import Categories from "meteor/nova:categories";
-import NovaForm from "meteor/nova:forms";
 
 const CategoriesNewForm = (props, context) => {
 
   return (
     <div className="categories-new-form">
-      <NovaForm 
-        collection={Categories} 
-        currentUser={context.currentUser}
-        methodName="categories.new"
-        successCallback={(category)=>{
-          context.messages.flash("Category created.", "success");
+      <Components.SmartForm 
+        collection={Categories}
+        mutationFragment={getFragment('CategoriesList')}
+        successCallback={category => {
+          props.closeModal();
+          props.flash(context.intl.formatMessage({id: 'categories.new_success'}, {name: category.name}), "success");
         }}
       />
     </div>
@@ -21,10 +21,13 @@ const CategoriesNewForm = (props, context) => {
 
 CategoriesNewForm.displayName = "CategoriesNewForm";
 
-CategoriesNewForm.contextTypes = {
-  currentUser: React.PropTypes.object,
-  messages: React.PropTypes.object
+CategoriesNewForm.propTypes = {
+  closeCallback: React.PropTypes.func,
+  flash: React.PropTypes.func,
 };
 
-module.exports = CategoriesNewForm;
-export default CategoriesNewForm;
+CategoriesNewForm.contextTypes = {
+  intl: intlShape,
+};
+
+registerComponent('CategoriesNewForm', CategoriesNewForm, withMessages);

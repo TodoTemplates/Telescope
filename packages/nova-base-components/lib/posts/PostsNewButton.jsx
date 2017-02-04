@@ -1,26 +1,28 @@
+import { Components, registerComponent, withCurrentUser } from 'meteor/nova:core';
 import React, { PropTypes, Component } from 'react';
 import { FormattedMessage, intlShape } from 'react-intl';
 import { Button } from 'react-bootstrap';
-import { ModalTrigger } from "meteor/nova:core";
 
 const PostsNewButton = (props, context) => {
 
-  const size = context.currentUser ? "large" : "small";
+  const size = props.currentUser ? "large" : "small";
   const button = <Button className="posts-new-button" bsStyle="primary"><FormattedMessage id="posts.new_post"/></Button>;
   return (
-    <ModalTrigger size={size} title={context.intl.formatMessage({id: "posts.new_post"})} component={button}>
-      <Telescope.components.PostsNewForm/>
-    </ModalTrigger>
+    <Components.ModalTrigger size={size} title={context.intl.formatMessage({id: "posts.new_post"})} component={button}>
+      <Components.PostsNewForm />
+    </Components.ModalTrigger>
   )
 }
 
 PostsNewButton.displayName = "PostsNewButton";
 
-PostsNewButton.contextTypes = {
+PostsNewButton.propTypes = {
   currentUser: React.PropTypes.object,
+};
+
+PostsNewButton.contextTypes = {
   messages: React.PropTypes.object,
   intl: intlShape
-}
+};
 
-module.exports = PostsNewButton;
-export default PostsNewButton;
+registerComponent('PostsNewButton', PostsNewButton, withCurrentUser);
