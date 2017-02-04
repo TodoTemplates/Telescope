@@ -1,7 +1,12 @@
 Package.describe({
   name: "nova:comments",
   summary: "Telescope comments package",
+<<<<<<< HEAD
   version: "1.0.0",
+=======
+
+  version: "0.27.5-nova",
+>>>>>>> origin/master
   git: "https://github.com/TelescopeJS/Telescope.git"
 });
 

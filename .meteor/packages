@@ -18,7 +18,12 @@ nova:notifications
 nova:getting-started
 nova:categories
 nova:voting
+<<<<<<< HEAD
+nova:forms
+# nova:embedly
+=======
 nova:embedly
+>>>>>>> refs/heads/jeffsdevel
 nova:api
 nova:rss
 nova:subscribe
@@ -28,7 +33,20 @@ nova:subscribe
 nova:debug
 # nova:kadira
 
+<<<<<<< HEAD
+accounts-password
+accounts-twitter
+accounts-facebook
+=======
+<<<<<<< HEAD
 ############ Theme Packages ############
+>>>>>>> refs/heads/jeffsdevel
+=======
+accounts-password@1.3.3
+# accounts-twitter
+# accounts-facebook
+>>>>>>> refs/remotes/TelescopeJS/master
+>>>>>>> origin/master
 
 nova:base-components    # default ui components
 nova:base-styles        # default styling
@@ -38,9 +56,24 @@ nova:i18n-en-us         # default language translation
 
 ############ Your Packages ############
 
+<<<<<<< HEAD
+todotemplates-package
+react-meteor-data
+service-configuration
+static-html
+# meteortoys:allthings
+http
+# nova:cloudinary
+=======
+<<<<<<< HEAD
 accounts-password@1.3.3
 # accounts-twitter
 # accounts-facebook
 
 # customization-demo
 # framework-demo
+>>>>>>> refs/heads/jeffsdevel
+=======
+# my-custom-package
+>>>>>>> refs/remotes/TelescopeJS/master
+>>>>>>> origin/master

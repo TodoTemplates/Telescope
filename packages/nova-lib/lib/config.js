@@ -7,7 +7,24 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 const Telescope = {};
 
+<<<<<<< HEAD
 Telescope.VERSION = '1.0.0';
+=======
+<<<<<<< HEAD
+Telescope.VERSION = '0.26.4-nova';
+=======
+Telescope.VERSION = '0.27.5-nova';
+>>>>>>> refs/remotes/TelescopeJS/master
+
+// ------------------------------------- Config -------------------------------- //
+
+/**
+ * @summary Telescope configuration namespace
+ * @namespace Telescope.config
+ */
+Telescope.config = {};
+
+>>>>>>> origin/master
 
 // ------------------------------------- Schemas -------------------------------- //
 

@@ -1,0 +1,82 @@
+import Posts from "meteor/nova:posts";
+import Users from 'meteor/nova:users';
+
+// check if user can create a new post
+const canInsert = user => Users.canDo(user, "posts.new");
+// check if user can edit a post
+const canEdit = Users.canEdit;
+
+Posts.addField(
+  {
+    fieldName: 'color',
+    fieldSchema: {
+      type: String,
+      control: "select", // use a select form control
+      optional: true, // this field is not required
+      insertableIf: canInsert, // insertable by regular logged in users and admins
+      editableIf: canEdit, // editable by the post's owner or admins
+      autoform: {
+        options: function () { // options for the select form control
+          return [
+            {value: "white", label: "White"},
+            {value: "yellow", label: "Yellow"},
+            {value: "blue", label: "Blue"},
+            {value: "red", label: "Red"},
+            {value: "green", label: "Green"}
+          ];
+        }
+      },
+      publish: true // make that field public and send it to the client
+    }
+  }
+);
+
+
+Posts.addField(
+  {
+    fieldName: 'preview',
+    fieldSchema: {
+      type: [String],
+      optional: true, // this field is not required
+      publish: true // make that field public and send it to the client
+    }
+  }
+);
+
+Posts.addField(
+  {
+    fieldName: 'unsplashNumber',
+    fieldSchema: {
+      type: String,
+      optional: true, // this field is not required
+      publish: true // make that field public and send it to the client
+    }
+  }
+);
+
+Posts.addField(
+  {
+    fieldName: 'description',
+    fieldSchema: {
+      type: String,
+      optional: false, // this field is not required
+      publish: true, // make that field public and send it to the client
+      insertableIf: canInsert, // insertable by regular logged in users and admins
+      editableIf: canEdit, // editable by the post's owner or admins
+      order: 21,
+      control: "text",
+      max: 500
+    }
+  }
+);
+/*
+The main post list view uses a special object to determine which fields to publish,
+so we also add our new field to that object:
+*/
+
+import PublicationUtils from 'meteor/utilities:smart-publications';
+
+PublicationUtils.addToFields(Posts.publishedFields.list, ["color"]);
+PublicationUtils.addToFields(Posts.publishedFields.list, ["preview"]);
+PublicationUtils.addToFields(Posts.publishedFields.list, ["unsplashNumber"]);
+PublicationUtils.addToFields(Posts.publishedFields.list, ["description"]);

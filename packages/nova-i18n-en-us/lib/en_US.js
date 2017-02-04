@@ -5,7 +5,7 @@ addStrings('en', {
   "forms.cancel": "Cancel",
   "forms.select_option": "-- select option --",
 
-  "posts.new_post": "New Post",
+  "posts.new_post": "Upload Template",
   "posts.edit": "Edit",
   "posts.edit_success": "Post “{title}” edited.",
   "posts.delete": "Delete",
@@ -149,11 +149,15 @@ addStrings('en', {
   "app.404": "Sorry, we couldn't find what you were looking for.",
   "app.powered_by": "Powered by Telescope",
   "app.or": "Or",
+<<<<<<< HEAD
+
+=======
   "app.noPermission": "Sorry, you do not have the permission to do this at this time.",
   "app.mutation_not_allowed": "Sorry, you don't have the rights to perform this mutation on this document (details: {value})",
   "app.disallowed_property_detected": "Disallowed property detected: {value}",
   "app.something_bad_happened": "Something bad happened...",
   
+>>>>>>> refs/heads/jeffsdevel
   "newsletter": "Newsletter",
   "newsletter.subscribe": "Subscribe",
   "newsletter.unsubscribe": "Unsubscribe",
@@ -164,4 +168,12 @@ addStrings('en', {
 
   "admin": "Admin",
   "notifications": "Notifications",
+<<<<<<< HEAD
+<<<<<<< HEAD
+}
+=======
 });
+>>>>>>> refs/heads/jeffsdevel
+=======
+};
+>>>>>>> origin/master

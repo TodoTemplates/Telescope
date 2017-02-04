@@ -8,7 +8,7 @@ Package.describe({
 Package.onUse(function(api) {
 
   api.versionsFrom("METEOR@1.3");
-  
+
   api.use([
     'nova:core@1.0.0',
     'nova:users@1.0.0',

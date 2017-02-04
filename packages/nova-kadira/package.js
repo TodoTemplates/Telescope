@@ -10,7 +10,12 @@ Package.onUse(function (api) {
   api.versionsFrom(['METEOR@1.0']);
 
   api.use([
+<<<<<<< HEAD
     'nova:core@1.0.0',
+=======
+
+    'nova:core@0.27.5-nova',
+>>>>>>> origin/master
     'meteorhacks:kadira@2.30.0',
     'kadira:debug@3.2.2',
     'meteorhacks:kadira-profiler@1.2.1'
