@@ -5,7 +5,11 @@ Users.getNotificationProperties = function (user) {
   const properties = {
     profileUrl: Users.getProfileUrl(user),
 <<<<<<< HEAD
+<<<<<<< HEAD
     username: Users.getDisplayName(user),
+=======
+    displayName: Users.getDisplayName(user),
+>>>>>>> origin/master
     siteTitle: Telescope.settings.get('title'),
     siteUrl: Telescope.utils.getSiteUrl()
 =======

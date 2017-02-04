@@ -4,9 +4,22 @@ import { Button } from 'react-bootstrap';
 import moment from 'moment';
 import { ModalTrigger } from "meteor/nova:core";
 import { Link } from 'react-router';
+<<<<<<< HEAD
 import Posts from "meteor/nova:posts";
 import Categories from "meteor/nova:categories";
 import Users from 'meteor/nova:users';
+=======
+<<<<<<< HEAD:packages/todotemplates-package/lib/components/CustomPostsItem.bak.jsx
+import Posts from "meteor/nova:posts";
+import Categories from "meteor/nova:categories";
+import Users from 'meteor/nova:users';
+=======
+// import { Button } from 'react-bootstrap';
+// import moment from 'moment';
+// import { ModalTrigger } from "meteor/nova:core";
+// import Categories from "meteor/nova:categories";
+>>>>>>> refs/remotes/TelescopeJS/master:packages/my-custom-package/lib/components/CustomPostsItem.jsx
+>>>>>>> origin/master
 
 class CustomPostsItem extends Telescope.components.PostsItem {
 
@@ -57,16 +70,34 @@ class CustomPostsItem extends Telescope.components.PostsItem {
         </div>
 
         {this.renderCommenters()}
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD:packages/todotemplates-package/lib/components/CustomPostsItem.bak.jsx
+>>>>>>> origin/master
         <div className="posts-item-import">
           <Link to={Posts.getLink(post)} className="post-import" target="_blank">
             Import
           </Link>
         </div>
+<<<<<<< HEAD
+=======
+=======
+
+>>>>>>> refs/remotes/TelescopeJS/master:packages/my-custom-package/lib/components/CustomPostsItem.jsx
+>>>>>>> origin/master
 
       </div>
     )
   }
+<<<<<<< HEAD
 };
+=======
+<<<<<<< HEAD:packages/todotemplates-package/lib/components/CustomPostsItem.bak.jsx
+};
+=======
+}
+>>>>>>> refs/remotes/TelescopeJS/master:packages/my-custom-package/lib/components/CustomPostsItem.jsx
+>>>>>>> origin/master
 
 CustomPostsItem.propTypes = {
   post: React.PropTypes.object.isRequired

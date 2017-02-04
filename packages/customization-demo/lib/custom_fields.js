@@ -13,9 +13,14 @@ Posts.addField(
       type: String,
       control: "select", // use a select form control
       optional: true, // this field is not required
+<<<<<<< HEAD:packages/customization-demo/lib/custom_fields.js
       insertableBy: ['members'],
       editableBy: ['members'],
       viewableBy: ['members'],
+=======
+      insertableIf: canInsert,
+      editableIf: canEdit,
+>>>>>>> origin/master:packages/my-custom-package/lib/custom_fields.js
       form: {
         options: function () { // options for the select form control
           return [

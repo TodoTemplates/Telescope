@@ -1,12 +1,25 @@
 import React from 'react';
 import { withCurrentUser, getSetting, Components, registerComponent } from 'meteor/nova:core';
 
+<<<<<<< HEAD
 
 const Header = (props, context) => {
 
   const logoUrl = getSetting("logoUrl");
   const siteTitle = getSetting("title", "Nova");
   const tagline = getSetting("tagline");
+=======
+<<<<<<< HEAD
+const Header = ({currentUser}) => {
+
+=======
+const Header = (props, {currentUser}) => {
+  
+>>>>>>> refs/remotes/TelescopeJS/master
+  const logoUrl = Telescope.settings.get("logoUrl");
+  const siteTitle = Telescope.settings.get("title", "Nova");
+  const tagline = Telescope.settings.get("tagline");
+>>>>>>> origin/master
 
   return (
     <div className="header-wrapper">

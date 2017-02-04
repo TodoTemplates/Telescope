@@ -28,8 +28,12 @@ Package.onUse(function (api) {
     // 'react-meteor-data@0.2.8',
     'service-configuration',
     'shell-server',
+<<<<<<< HEAD
     //'apollo@0.1.2',
     
+=======
+
+>>>>>>> origin/master
     // Third-party packages
 
     'aldeed:simple-schema@1.5.3',

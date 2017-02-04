@@ -1,7 +1,12 @@
 Package.describe({
   name: 'nova:cloudinary',
   summary: 'Telescope file upload package.',
+<<<<<<< HEAD
   version: '1.0.0',
+=======
+
+  version: '0.27.5-nova',
+>>>>>>> origin/master
   git: "https://github.com/TelescopeJS/Telescope.git"
 });
 
@@ -19,7 +24,7 @@ Package.onUse(function (api) {
   ], ['client', 'server']);
 
   api.addFiles([
-    
+
   ], ['client']);
 
   api.addFiles([

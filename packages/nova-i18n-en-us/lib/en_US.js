@@ -169,7 +169,11 @@ addStrings('en', {
   "admin": "Admin",
   "notifications": "Notifications",
 <<<<<<< HEAD
+<<<<<<< HEAD
 }
 =======
 });
 >>>>>>> refs/heads/jeffsdevel
+=======
+};
+>>>>>>> origin/master

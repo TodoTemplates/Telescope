@@ -12,8 +12,13 @@ Package.onUse(function (api) {
   api.use(['nova:core@1.0.0']);
 
   api.use([
+<<<<<<< HEAD
     'nova:posts@1.0.0', 
     'nova:comments@1.0.0'
+=======
+    'nova:posts@0.27.5-nova',
+    'nova:comments@0.27.5-nova'
+>>>>>>> origin/master
   ], ['client', 'server']);
 
   api.mainModule("lib/server.js", "server");
